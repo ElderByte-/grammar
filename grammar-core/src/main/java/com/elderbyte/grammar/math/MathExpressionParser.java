@@ -1,5 +1,6 @@
-package com.elderbyte.grammar;
+package com.elderbyte.grammar.math;
 
+import com.elderbyte.grammar.ExpressionParser;
 import com.elderbyte.grammar.dom.expressions.Arity;
 import com.elderbyte.grammar.dom.expressions.Operator;
 import com.elderbyte.grammar.scanner.OperatorSet;

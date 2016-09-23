@@ -1,6 +1,5 @@
 package com.elderbyte.grammar.scanner;
 
-import com.elderbyte.grammar.dom.expressions.Operator;
 import com.elderbyte.common.ArgumentNullException;
 
 import java.util.*;
@@ -20,7 +19,7 @@ public class ExpressionScanner {
      *                                                                         *
      **************************************************************************/
 
-    private final Map<String, Token> terminalMap = new HashMap<>();
+    private final TerminalTokenManager terminalManager;
     private final Predicate<String> isIdentifierPredicate;
     private final Predicate<String> isLiteralValuePredicate;
 
@@ -51,7 +50,7 @@ public class ExpressionScanner {
      */
     public ExpressionScanner(OperatorSet operatorSet, Pattern isWordRegex){
         this(
-            defaultTerminals(operatorSet),
+            new TerminalTokenManager(operatorSet),
 
                 // Default identifier
                 x -> isWordRegex.matcher(x).matches(),
@@ -65,18 +64,16 @@ public class ExpressionScanner {
      * Creates a new ExpressionTokenizer with the given Operators
      */
     public ExpressionScanner(
-            Iterable<Token> terminalTokens,
+            TerminalTokenManager terminalManager,
             Predicate<String> isIdentifierPredicate,
             Predicate<String> isLiteralValuePredicate){
 
-        if(terminalTokens == null) throw new ArgumentNullException("terminalTokens");
+        if(terminalManager == null) throw new ArgumentNullException("terminalManager");
         if(isIdentifierPredicate == null) throw new ArgumentNullException("isWordPredicate");
 
+        this.terminalManager = terminalManager;
         this.isIdentifierPredicate = isIdentifierPredicate;
         this.isLiteralValuePredicate = isLiteralValuePredicate;
-        for(Token op : terminalTokens){
-            terminalMap.put(op.getValue(), op);
-        }
     }
 
 
@@ -100,7 +97,7 @@ public class ExpressionScanner {
         List<Token> tokens = new ArrayList<>();
 
 
-        RawTokenizer tokenizer = new RawTokenizer(expression, terminalMap.keySet());
+        RawTokenizer tokenizer = new RawTokenizer(expression, terminalManager.getTerminalKeywords());
 
         Token previous = null;
 
@@ -131,7 +128,7 @@ public class ExpressionScanner {
 
 
     private Token emit(String currentWord){
-        Token t = getTerminal(currentWord);
+        Token t = terminalManager.findTerminal(currentWord);
 
         if(t == null){
             if(isIdentifier(currentWord)){
@@ -155,33 +152,6 @@ public class ExpressionScanner {
         return isLiteralValuePredicate.test(word);
     }
 
-    private Token getTerminal(String terminal) {
-        if(terminalMap.containsKey(terminal)){
-            return terminalMap.get(terminal);
-        }
-        return null;
-    }
 
-
-    private static Iterable<Token> defaultTerminals(OperatorSet operatorSet){
-
-        if(operatorSet == null) throw new ArgumentNullException("operatorSet");
-
-
-        List<Token> defaultTerminals = new ArrayList<>();
-
-        defaultTerminals.add(new Token(TokenType.Whitespace, " "));
-        defaultTerminals.add(new Token(TokenType.Whitespace, "\t"));
-        defaultTerminals.add(new Token(TokenType.Whitespace, ","));
-
-        defaultTerminals.add(new Token(TokenType.Parentheses_Open, "("));
-        defaultTerminals.add(new Token(TokenType.Parentheses_Closed, ")"));
-
-        for(Operator o : operatorSet.getAllOperators()){
-            defaultTerminals.add(new Token(TokenType.Operator, o.getSign()));
-        }
-
-        return defaultTerminals;
-    }
 
 }
