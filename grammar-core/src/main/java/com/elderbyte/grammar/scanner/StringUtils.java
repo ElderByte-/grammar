@@ -1,8 +1,11 @@
 package com.elderbyte.grammar.scanner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -20,6 +23,8 @@ public final class StringUtils {
 
         return Arrays.asList(Pattern.compile(regex).split(input));
     }
+
+
 
 
 }

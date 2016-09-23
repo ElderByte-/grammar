@@ -79,19 +79,12 @@ public class MathExpressionParserTest {
 
     @Test
     public void testUnaryPrecedence(){
-        ExpressionNode node = mathExpressionParser.parseExpression("10 * -3");
+        ExpressionNode node = mathExpressionParser.parseExpression("10 * -Ç3");
 
         Assert.assertEquals(BinaryOperatorExpression.class, node.getClass());
         BinaryOperatorExpression bex = (BinaryOperatorExpression)node;
 
-
-        Assert.assertEquals(bex.getOperator().getSign(), "-");
-
-        Assert.assertEquals(LiteralValueExpression.class, bex.getLeft().getClass());
-        Assert.assertEquals("6", ((LiteralValueExpression)bex.getLeft()).getValue());
-
-        Assert.assertEquals(LiteralValueExpression.class, bex.getRight().getClass());
-        Assert.assertEquals("5", ((LiteralValueExpression)bex.getRight()).getValue());
+        Assert.assertEquals(bex.getOperator().getSign(), "*");
     }
 
 
@@ -99,6 +92,5 @@ public class MathExpressionParserTest {
     public void testIllegalExpression(){
         mathExpressionParser.parseExpression("-");
     }
-
 
 }

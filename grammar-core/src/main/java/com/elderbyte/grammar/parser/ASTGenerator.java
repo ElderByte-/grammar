@@ -36,10 +36,16 @@ public class ASTGenerator {
             if(isOperator(token)){
                 // token is Operator / Function
                 // Get count of required params for this op / func
-                int paramsNumber = getNumberOfParams(token, expressionNodeStack.size());
+                int required = requiredParameters(token);
+
+                int available = expressionNodeStack.size();
+
+                if(available < required){
+                    throw new InsufficientParametersException("Not enough parameters for operator "+token+". Have " +  available + " but need " + required);
+                }
 
                 List<ExpressionNode> params = new ArrayList<>();
-                for(int i = 0; i < paramsNumber; i++){
+                for(int i = 0; i < required; i++){
                     params.add(expressionNodeStack.pop());
                 }
 
@@ -67,9 +73,9 @@ public class ASTGenerator {
     private ExpressionNode buildExpression(Token operator, List<ExpressionNode> params){
         if(operator.getType() == TokenType.Operator){
             Operator op = operatorSet.findOperator(operator.getValue());
-            if(op.getArity() == Arity.Binary || (op.getArity() == Arity.UnaryOrBinary && params.size() == 2)){
+            if(op.getArity() == Arity.Binary){
                 return new BinaryOperatorExpression(params.get(0), op, params.get(1));
-            }else if(op.getArity() == Arity.Unary || op.getArity() == Arity.UnaryOrBinary){
+            }else if(op.getArity() == Arity.Unary){
                 return new UnaryOperatorExpression(op, params.get(0));
             }
         }
@@ -93,7 +99,7 @@ public class ASTGenerator {
         return false;   // TODO
     }
 
-    private int getNumberOfParams(Token token, int available) {
+    private int requiredParameters(Token token) {
 
         int paramCount;
 
@@ -101,18 +107,14 @@ public class ASTGenerator {
 
             Operator op = operatorSet.findOperator(token.getValue());
 
-            if(op.getArity() == Arity.Binary){
-                paramCount = 2;
-            }else if(op.getArity() == Arity.Unary) {
+            if(op.getArity() == Arity.Unary){
                 paramCount = 1;
-            }else if(op.getArity() == Arity.UnaryOrBinary){
-                paramCount = Math.max(Math.min(available, 2), 1);
+            }else if(op.getArity() == Arity.Binary) {
+                paramCount = 2;
+            }else if(op.getArity() == Arity.Ternary){
+                paramCount = 3;
             }else{
                 throw new IllegalStateException("Operator arity " + op.getArity() + " not yet supported!");
-            }
-
-            if(available < paramCount){
-                throw new InsufficientParametersException("Not enough parameters for operator "+op+". Have " +  available + " but need " + paramCount);
             }
             return paramCount;
         }else{

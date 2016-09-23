@@ -22,12 +22,6 @@ public enum  Arity {
     Binary,
 
     /**
-     * One or two arguments
-     */
-    UnaryOrBinary,
-
-
-    /**
      * Three arguments:  a ? b : c
      */
     Ternary,
