@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.elderbyte.grammar.MathExpressionParserTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2016-09-23T16:25:46" hostname="ElderBook.elder-router" time="0.054">
+  <properties/>
+  <testcase name="testBinaryAdd" classname="com.elderbyte.grammar.MathExpressionParserTest" time="0.051"/>
+  <testcase name="testLiteralNumber" classname="com.elderbyte.grammar.MathExpressionParserTest" time="0.0"/>
+  <testcase name="testIllegalExpression" classname="com.elderbyte.grammar.MathExpressionParserTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

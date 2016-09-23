@@ -2,7 +2,6 @@ package com.elderbyte.grammar.dom.expressions;
 
 /**
  * Represents a reference to a variable
- *
  */
 public class VariableReference extends ExpressionNode {
 

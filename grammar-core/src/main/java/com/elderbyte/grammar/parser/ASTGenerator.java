@@ -1,6 +1,9 @@
 package com.elderbyte.grammar.parser;
 
 import com.elderbyte.grammar.dom.expressions.*;
+import com.elderbyte.grammar.scanner.OperatorSet;
+import com.elderbyte.grammar.scanner.Token;
+import com.elderbyte.grammar.scanner.TokenType;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -28,13 +31,15 @@ public class ASTGenerator {
         Stack<ExpressionNode> expressionNodeStack = new Stack<>();
 
         rpn.forEach(token -> {
+
+
             if(isOperator(token)){
                 // token is Operator / Function
                 // Get count of required params for this op / func
                 int paramsRequired = findParamCount(token);
 
                 if(expressionNodeStack.size() < paramsRequired){
-                    throw new InsufficientParametersException("Not enough parameters for this operator. Have " +  expressionNodeStack.size() + " but need " + paramsRequired);
+                    throw new InsufficientParametersException("Not enough parameters for operator "+token+". Have " +  expressionNodeStack.size() + " but need " + paramsRequired);
                 }
 
                 List<ExpressionNode> params = new ArrayList<>();
@@ -57,7 +62,7 @@ public class ASTGenerator {
         if(expressionNodeStack.size() == 1){
             return expressionNodeStack.pop();
         }else{
-            throw new ASTGeneratorException("Too many values for the given operators!");
+            throw new ASTGeneratorException("Too many values for the given operators! Stack was " + expressionNodeStack.size());
         }
     }
 

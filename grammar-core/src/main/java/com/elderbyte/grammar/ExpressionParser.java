@@ -3,6 +3,9 @@ package com.elderbyte.grammar;
 import com.elderbyte.grammar.dom.expressions.ExpressionNode;
 import com.elderbyte.grammar.parser.*;
 import com.elderbyte.common.ArgumentNullException;
+import com.elderbyte.grammar.scanner.ExpressionScanner;
+import com.elderbyte.grammar.scanner.OperatorSet;
+import com.elderbyte.grammar.scanner.Token;
 
 import java.util.function.Function;
 import java.util.regex.Pattern;

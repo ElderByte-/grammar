@@ -3,6 +3,9 @@ package com.elderbyte.grammar.parser;
 import com.elderbyte.grammar.CodeDomException;
 import com.elderbyte.grammar.dom.expressions.Operator;
 import com.elderbyte.common.ArgumentNullException;
+import com.elderbyte.grammar.scanner.OperatorSet;
+import com.elderbyte.grammar.scanner.Token;
+import com.elderbyte.grammar.scanner.TokenType;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -60,7 +63,7 @@ public class RPNTransformer {
 
 
         tokens.forEach(token -> {
-            if(isLiteral(token)){
+            if(isLiteral(token) || isIdentifier(token)){
                 rpn.add(token);
             }else if(isOperator(token)){
 
@@ -150,6 +153,10 @@ public class RPNTransformer {
     }
 
     private boolean isLiteral(Token token){
+        return token.getType() == TokenType.Literal;
+    }
+
+    private boolean isIdentifier(Token token){
         return token.getType() == TokenType.Identifier;
     }
 
