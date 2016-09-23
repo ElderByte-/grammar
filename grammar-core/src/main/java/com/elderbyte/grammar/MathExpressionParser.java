@@ -1,5 +1,6 @@
 package com.elderbyte.grammar;
 
+import com.elderbyte.grammar.dom.expressions.Arity;
 import com.elderbyte.grammar.dom.expressions.Operator;
 import com.elderbyte.grammar.scanner.OperatorSet;
 
@@ -17,16 +18,16 @@ public class MathExpressionParser extends ExpressionParser {
 
     private static OperatorSet mathOpSet(){
         List<Operator> mathOperators = new ArrayList<>();
-        mathOperators.add(new Operator("+", 2, true, false));
-        mathOperators.add(new Operator("-", 2, true, false));
-        mathOperators.add(new Operator("*", 3, true, false));
-        mathOperators.add(new Operator("/", 3, true, false));
-        mathOperators.add(new Operator("^", 4, false, false));
-        mathOperators.add(new Operator("%", 4, false, false));
+        mathOperators.add(new Operator("+", 2, true, Arity.UnaryOrBinary));
+        mathOperators.add(new Operator("-", 10, true, Arity.UnaryOrBinary));
+        mathOperators.add(new Operator("*", 3, true, Arity.Binary));
+        mathOperators.add(new Operator("/", 3, true, Arity.Binary));
+        mathOperators.add(new Operator("^", 4, false, Arity.Binary));
+        mathOperators.add(new Operator("%", 4, false, Arity.Binary));
 
-        mathOperators.add(new Operator("&", 3, true, false));
-        mathOperators.add(new Operator("|", 3, true, false));
-        mathOperators.add(new Operator("!", 5, true, true));
+        mathOperators.add(new Operator("&", 3, true, Arity.Binary));
+        mathOperators.add(new Operator("|", 3, true, Arity.Binary));
+        mathOperators.add(new Operator("!", 5, true, Arity.Unary));
 
         return new OperatorSet(mathOperators);
     }

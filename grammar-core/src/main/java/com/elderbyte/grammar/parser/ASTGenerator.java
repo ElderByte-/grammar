@@ -36,14 +36,10 @@ public class ASTGenerator {
             if(isOperator(token)){
                 // token is Operator / Function
                 // Get count of required params for this op / func
-                int paramsRequired = findParamCount(token);
-
-                if(expressionNodeStack.size() < paramsRequired){
-                    throw new InsufficientParametersException("Not enough parameters for operator "+token+". Have " +  expressionNodeStack.size() + " but need " + paramsRequired);
-                }
+                int paramsNumber = getNumberOfParams(token, expressionNodeStack.size());
 
                 List<ExpressionNode> params = new ArrayList<>();
-                for(int i = 0; i < paramsRequired; i++){
+                for(int i = 0; i < paramsNumber; i++){
                     params.add(expressionNodeStack.pop());
                 }
 
@@ -69,14 +65,12 @@ public class ASTGenerator {
 
 
     private ExpressionNode buildExpression(Token operator, List<ExpressionNode> params){
-
         if(operator.getType() == TokenType.Operator){
             Operator op = operatorSet.findOperator(operator.getValue());
-            if(!op.isUnary()){
+            if(op.getArity() == Arity.Binary || (op.getArity() == Arity.UnaryOrBinary && params.size() == 2)){
                 return new BinaryOperatorExpression(params.get(0), op, params.get(1));
-            }else{
+            }else if(op.getArity() == Arity.Unary || op.getArity() == Arity.UnaryOrBinary){
                 return new UnaryOperatorExpression(op, params.get(0));
-
             }
         }
         throw new ASTGeneratorException("Failed to build Expression. Unexpected Operator Token " + operator + " [" + operator.getType() + "]!");
@@ -99,9 +93,28 @@ public class ASTGenerator {
         return false;   // TODO
     }
 
-    private int findParamCount(Token token) {
+    private int getNumberOfParams(Token token, int available) {
+
+        int paramCount;
+
         if(token.getType() == TokenType.Operator){
-            return !operatorSet.findOperator(token.getValue()).isUnary() ? 2 : 1;
+
+            Operator op = operatorSet.findOperator(token.getValue());
+
+            if(op.getArity() == Arity.Binary){
+                paramCount = 2;
+            }else if(op.getArity() == Arity.Unary) {
+                paramCount = 1;
+            }else if(op.getArity() == Arity.UnaryOrBinary){
+                paramCount = Math.max(Math.min(available, 2), 1);
+            }else{
+                throw new IllegalStateException("Operator arity " + op.getArity() + " not yet supported!");
+            }
+
+            if(available < paramCount){
+                throw new InsufficientParametersException("Not enough parameters for operator "+op+". Have " +  available + " but need " + paramCount);
+            }
+            return paramCount;
         }else{
             // Function? Not implemented yet. Would require look-ahead to count params...
             throw new IllegalStateException("Only operators are currently supported");

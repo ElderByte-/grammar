@@ -5,7 +5,7 @@ package com.elderbyte.grammar.dom.expressions;
  */
 public final class Operator {
 
-    private final boolean isUnary;
+    private final Arity arity;
     private final String sign;
     private final int precedence;
     private final boolean isLeftAssociative;
@@ -15,17 +15,17 @@ public final class Operator {
      * @param sign The operator symbol
      * @param precedence
      * @param isLeftAssociative
-     * @param isUnary Is this Operator unary?
+     * @param arity Is this Operator strictly bianry, unary or both?
      */
-    public Operator(String sign, int precedence, boolean isLeftAssociative, boolean isUnary){
-        this.isUnary = isUnary;
+    public Operator(String sign, int precedence, boolean isLeftAssociative, Arity arity){
+        this.arity = arity;
         this.sign = sign;
         this.precedence = precedence;
         this.isLeftAssociative = isLeftAssociative;
     }
 
-    public boolean isUnary() {
-        return isUnary;
+    public Arity getArity() {
+        return arity;
     }
 
     public String getSign() {
@@ -44,7 +44,7 @@ public final class Operator {
     @Override
     public String toString() {
         return "Operator{" +
-            "isUnary=" + isUnary +
+            "arity=" + arity +
             ", sign='" + sign + '\'' +
             ", precedence=" + precedence +
             ", isLeftAssociative=" + isLeftAssociative +

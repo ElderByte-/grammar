@@ -24,10 +24,10 @@ public class ExpressionScanner {
     private final Predicate<String> isIdentifierPredicate;
     private final Predicate<String> isLiteralValuePredicate;
 
-    private static final Pattern DefaultIdentifierPattern = Pattern.compile("^[a-zA-Z]+\\\\w+$");
+    private static final Pattern DefaultIdentifierPattern = Pattern.compile("^[a-zA-Z]+\\w+$");
 
     private static final Pattern NumberPattern = Pattern.compile("^[0-9]+$");
-    private static final Pattern FloatingPointNumberPattern = Pattern.compile("^[0-9]+\\\\.[0-9]+$");
+    private static final Pattern FloatingPointNumberPattern = Pattern.compile("^[0-9]+\\.[0-9]+$");
 
 
     /***************************************************************************
