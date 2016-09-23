@@ -15,7 +15,7 @@ public final class Operator {
      * @param sign The operator symbol
      * @param precedence
      * @param isLeftAssociative
-     * @param arity Is this Operator strictly bianry, unary or both?
+     * @param arity Is this Operator strictly binary, unary etc?
      */
     public Operator(String sign, int precedence, boolean isLeftAssociative, Arity arity){
         this.arity = arity;

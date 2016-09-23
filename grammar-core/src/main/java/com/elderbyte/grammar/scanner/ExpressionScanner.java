@@ -6,7 +6,6 @@ import com.elderbyte.common.ArgumentNullException;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -103,11 +102,22 @@ public class ExpressionScanner {
 
         RawTokenizer tokenizer = new RawTokenizer(expression, terminalMap.keySet());
 
+        Token previous = null;
+
         for(String rawToken : tokenizer.tokenize()){
             Token t = emit(rawToken);
             if(t != null){
+
+                if(t.getType() == TokenType.Operator){
+                    if(previous == null || previous.getType() == TokenType.Operator){
+                        t.markUnary();
+                    }
+                }
+
                 tokens.add(t);
+                previous = t;
             }
+
         }
 
         return tokens.stream();

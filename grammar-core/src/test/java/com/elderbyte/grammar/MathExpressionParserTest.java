@@ -79,7 +79,7 @@ public class MathExpressionParserTest {
 
     @Test
     public void testUnaryPrecedence(){
-        ExpressionNode node = mathExpressionParser.parseExpression("10 * -Ç3");
+        ExpressionNode node = mathExpressionParser.parseExpression("10 * -3");
 
         Assert.assertEquals(BinaryOperatorExpression.class, node.getClass());
         BinaryOperatorExpression bex = (BinaryOperatorExpression)node;

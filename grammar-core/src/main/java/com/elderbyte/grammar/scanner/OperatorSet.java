@@ -1,5 +1,6 @@
 package com.elderbyte.grammar.scanner;
 
+import com.elderbyte.grammar.dom.expressions.Arity;
 import com.elderbyte.grammar.dom.expressions.Operator;
 
 import java.util.HashMap;
@@ -10,7 +11,8 @@ import java.util.Map;
  */
 public class OperatorSet {
 
-    final Map<String, Operator> operators = new HashMap<>();
+    private final Map<String, Operator> operators = new HashMap<>();
+    private final  Map<String, Operator> unaryOperators = new HashMap<>();
 
     public OperatorSet(Operator... operators){
         for (Operator o : operators){
@@ -28,8 +30,29 @@ public class OperatorSet {
         return operators.values();
     }
 
-    public Operator findOperator(String sign){
-        return operators.get(sign);
+
+    public Operator findOperator(Token token){
+        Operator op = operators.get(token.getValue());
+
+
+        if(op != null && token.hasUnaryMark() && op.getArity() != Arity.Unary){
+            op = proxyUnary(op, token);
+        }
+
+        return op;
     }
+
+    private Operator proxyUnary(Operator original, Token token){
+        Operator unary = unaryOperators.get(token.getValue());
+        if(unary == null){
+            unary = new Operator(
+                    original.getSign(),
+                    99,
+                    original.isLeftAssociative(),
+                    Arity.Unary);
+        }
+        return unary;
+    }
+
 
 }

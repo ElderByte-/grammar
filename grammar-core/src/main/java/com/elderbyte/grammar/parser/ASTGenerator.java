@@ -72,7 +72,7 @@ public class ASTGenerator {
 
     private ExpressionNode buildExpression(Token operator, List<ExpressionNode> params){
         if(operator.getType() == TokenType.Operator){
-            Operator op = operatorSet.findOperator(operator.getValue());
+            Operator op = operatorSet.findOperator(operator);
             if(op.getArity() == Arity.Binary){
                 return new BinaryOperatorExpression(params.get(0), op, params.get(1));
             }else if(op.getArity() == Arity.Unary){
@@ -105,7 +105,7 @@ public class ASTGenerator {
 
         if(token.getType() == TokenType.Operator){
 
-            Operator op = operatorSet.findOperator(token.getValue());
+            Operator op = operatorSet.findOperator(token);
 
             if(op.getArity() == Arity.Unary){
                 paramCount = 1;

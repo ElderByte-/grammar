@@ -19,9 +19,6 @@ public class MathExpressionParser extends ExpressionParser {
     private static OperatorSet mathOpSet(){
         List<Operator> mathOperators = new ArrayList<>();
 
-        mathOperators.add(new Operator("+Ç", 10, true, Arity.Unary));
-        mathOperators.add(new Operator("-Ç", 10, true, Arity.Unary));
-
         mathOperators.add(new Operator("+", 2, true, Arity.Binary));
         mathOperators.add(new Operator("-", 2, true, Arity.Binary));
         mathOperators.add(new Operator("*", 3, true, Arity.Binary));
@@ -31,7 +28,8 @@ public class MathExpressionParser extends ExpressionParser {
 
         mathOperators.add(new Operator("&", 3, true, Arity.Binary));
         mathOperators.add(new Operator("|", 3, true, Arity.Binary));
-        mathOperators.add(new Operator("!", 5, true, Arity.Unary));
+
+        mathOperators.add(new Operator("!", 99, true, Arity.Unary));
 
         return new OperatorSet(mathOperators);
     }

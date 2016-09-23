@@ -9,6 +9,8 @@ public class Token {
     private final TokenType type;
     private final String value;
 
+    private transient boolean unaryFlag;
+
     /***************************************************************************
      *                                                                         *
      * Constructors                                                            *
@@ -46,5 +48,20 @@ public class Token {
     @Override
     public String toString(){
         return "[" + getValue() +" "+ getType() + "]";
+    }
+
+    /**
+     * Returns a copy of this token with the new given type.
+     */
+    public Token withOperator(TokenType type) {
+        return new Token(type, this.value);
+    }
+
+
+    public void markUnary(){
+        unaryFlag = true;
+    }
+    public boolean hasUnaryMark(){
+        return unaryFlag;
     }
 }

@@ -58,6 +58,7 @@ public class RPNTransformer {
      */
     public Stream<Token> toReversePolishNotation(Stream<Token> tokens){
 
+
         Stack<Token> operatorStack = new Stack<>();
         List<Token> rpn = new ArrayList<>();
 
@@ -136,7 +137,7 @@ public class RPNTransformer {
     }
 
     private int precedence(Token operator){
-        Operator op = operatorSet.findOperator(operator.getValue());
+        Operator op = operatorSet.findOperator(operator);
         if(op == null){
             throw new CodeDomException("Operator Token expected: " + operator);
         }
@@ -144,7 +145,7 @@ public class RPNTransformer {
     }
 
     private boolean isLeftAssociative(Token operator){
-        Operator op = operatorSet.findOperator(operator.getValue());
+        Operator op = operatorSet.findOperator(operator);
 
         if(op == null){
             throw new CodeDomException("Operator Token expected: " + operator);
