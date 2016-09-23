@@ -3,6 +3,8 @@ package com.elderbyte.grammar.math;
 import com.elderbyte.grammar.IExpressionParser;
 import com.elderbyte.grammar.dom.expressions.*;
 
+import java.util.Map;
+
 /**
  * Evaluates math expressions
  */
@@ -39,13 +41,23 @@ public class MathExpressionEvaluator {
      *                                                                         *
      **************************************************************************/
 
-
+    /**
+     * Evaluates a complex math expression dynamically.
+     *
+     * @param expression An expression such as '10 + 5 / 20 * (40 % 2)'
+     * @return The result as double, or throws an exception.
+     */
     public double eval(String expression) {
         ExpressionNode node = mathExpressionParser.parseExpression(expression);
-        return eval(node);
+        return eval(node, null);
     }
 
-    public double eval(ExpressionNode node) {
+    public double eval(String expression, Map<String, Double> context) {
+        ExpressionNode node = mathExpressionParser.parseExpression(expression);
+        return eval(node, context);
+    }
+
+    public double eval(ExpressionNode node, Map<String, Double> context) {
 
 
         if (node instanceof LiteralValueExpression) {
@@ -53,15 +65,29 @@ public class MathExpressionEvaluator {
             return Double.parseDouble(((LiteralValueExpression) node).getValue());
 
         } else if (node instanceof BinaryOperatorExpression) {
-            double right = eval(((BinaryOperatorExpression) node).getLeft());
-            double left = eval(((BinaryOperatorExpression) node).getRight());
+            double right = eval(((BinaryOperatorExpression) node).getLeft(), context);
+            double left = eval(((BinaryOperatorExpression) node).getRight(), context);
             Operator op = ((BinaryOperatorExpression) node).getOperator();
 
             return evalBinaryOperation(left, op, right);
-        }else if(node instanceof UnaryOperatorExpression){
-            double value = eval(((UnaryOperatorExpression) node).getInner());
+        }else if(node instanceof UnaryOperatorExpression) {
+            double value = eval(((UnaryOperatorExpression) node).getInner(), context);
 
             return evalUnaryOperation(value, ((UnaryOperatorExpression) node).getOperator());
+
+        }else if(node instanceof VariableReference){
+
+            String variable = ((VariableReference) node).getName();
+
+            if(context == null) throw new IllegalStateException("There are variables such as '"+variable+"' in this expression but you did not provide a variable context!");
+
+            Double varValue = context.get(variable);
+            if(varValue != null){
+                return varValue;
+            }else{
+                throw new IllegalStateException("Unknown variable: " + variable);
+            }
+
         }else{
             throw new IllegalStateException("Unsupported node encountered: " + node);
         }
