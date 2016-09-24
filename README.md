@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ElderByte-/grammar.svg?branch=master)](https://travis-ci.org/ElderByte-/grammar)
+[![Build Status](https://travis-ci.org/ElderByte-/grammar.svg?branch=master)](https://travis-ci.org/ElderByte-/grammar) [![Download](https://api.bintray.com/packages/elderbyte/maven/grammar-core/images/download.svg) ](https://bintray.com/elderbyte/maven/grammar-core/_latestVersion) 
 
 # grammar
 
