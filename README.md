@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ElderByte-/grammar.svg?branch=master)](https://travis-ci.org/ElderByte-/grammar)
+
 # grammar
 
 _grammar_ is a shunting-yard based expression parser to generate an Abstract Syntaxt Tree (AST). At its heart it is a library to allow you to quickly create your own expression language. But off course, since it is so easy, grammar also ships with some default expression parsers and evaluators for basic math and boolean support. 
