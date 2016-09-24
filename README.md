@@ -28,3 +28,31 @@ If your expression contains variables, _grammar_ supports them aswell:
 res = eval("90 - alpha", context)
 ```
 Just include a `Map<String, Double> context` in your eval argument, and variable-reference nodes are substituted for you.
+
+
+
+### Custom Parser
+
+This is an example of the default math expression parser configuration - you can create one for your own needs:
+```java
+
+public class MathExpressionParser extends ExpressionParser {
+
+    public MathExpressionParser(){
+        super(new OperatorSet(
+                new Operator("+", 2, true, Arity.Binary),
+                new Operator("-", 2, true, Arity.Binary),
+                new Operator("*", 3, true, Arity.Binary),
+                new Operator("/", 3, true, Arity.Binary),
+                new Operator("^", 4, false, Arity.Binary),
+                new Operator("%", 4, false, Arity.Binary)
+                ),
+                new Token(TokenType.Whitespace, " "),
+                new Token(TokenType.Whitespace, "\t"),
+                new Token(TokenType.Parentheses_Open, "("),
+                new Token(TokenType.Parentheses_Closed, ")")
+        );
+    }
+}
+
+```
