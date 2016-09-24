@@ -108,7 +108,7 @@ public class ExpressionScanner {
 
                 if(t.getType() == TokenType.Operator){
                     if(previous == null || previous.getType() == TokenType.Operator){
-                        t.markUnary();
+                        t = t.asUnary();
                     }
                 }
 

@@ -68,7 +68,7 @@ public class RPNTransformer {
             Token token = tokens.get(i);
             Token next = i+1<tokens.size() ? tokens.get(i+1) : null;
 
-            markIfFunction(token, next);
+            token = markIfFunction(token, next);
 
             if(isFunctionOrOperator(token)) {
 
@@ -178,12 +178,13 @@ public class RPNTransformer {
         return token.hasFunctionFlag() || token.getType() == TokenType.Operator;
     }
 
-    private void markIfFunction(Token token, Token next){
+    private Token markIfFunction(Token token, Token next){
         if(next != null){
             if(token.getType() == TokenType.Identifier && next.getType() == TokenType.Parentheses_Open){
                 // Token is a function invocation
-                token.markFunction();
+                return token.asFunction();
             }
         }
+        return token;
     }
 }

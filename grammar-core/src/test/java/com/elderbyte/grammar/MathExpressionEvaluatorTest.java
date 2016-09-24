@@ -1,6 +1,7 @@
 package com.elderbyte.grammar;
 
 
+import com.elderbyte.grammar.core.eval.EvalContext;
 import com.elderbyte.grammar.math.MathExpressionEvaluator;
 import com.elderbyte.grammar.math.MathExpressionParser;
 import org.junit.Assert;
@@ -51,6 +52,19 @@ public class MathExpressionEvaluatorTest {
         Assert.assertEquals(-10, result, 0);
     }
 
+
+    @Test
+    public void testUnary1(){
+        double result = math.eval("20 - -30");
+        Assert.assertEquals(50, result, 0);
+    }
+
+    @Test
+    public void testUnary2(){
+        double result = math.eval("20--30");
+        Assert.assertEquals(50, result, 0);
+    }
+
     @Test
     public void testComplex(){
         double result = math.eval("-180.5 + 5 * 2");
@@ -72,9 +86,10 @@ public class MathExpressionEvaluatorTest {
     @Test
     public void testVariableContext(){
 
-        Map<String, Double> ctx = new HashMap<>();
-        ctx.put("alpha", 15d);
-        double result = math.eval("90 - alpha", ctx);
+        EvalContext<Double> context = new EvalContext<>();
+        context.setVariable("alpha", 15d);
+
+        double result = math.eval("90 - alpha", context);
         Assert.assertEquals(75, result, 0);
     }
 
@@ -85,8 +100,31 @@ public class MathExpressionEvaluatorTest {
 
     @Test(expected = IllegalStateException.class)
     public void testVariableMissing(){
-        math.eval("90 - alpha", new HashMap<>());
+        EvalContext<Double> context = new EvalContext<>();
+        context.setVariable("huhu", 33d);
+        math.eval("90 - alpha", context);
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testFunctionEvalFail(){
+        EvalContext<Double> context = new EvalContext<>();
+        context.setVariable("huhu", 33d);
+        math.eval("sin(45)", context);
+    }
+
+    /*
+    @Test
+    public void testFunctionEval(){
+        EvalContext<Double> context = new EvalContext<>();
+        // TODO Register sin function
+        math.eval("sin(45)", context);
+    }
+
+    @Test
+    public void testFunctionEval3arg(){
+        EvalContext<Double> context = new EvalContext<>();
+        // TODO Register sin function
+        math.eval("sin(45) - 20", context);
+    }*/
 
 }

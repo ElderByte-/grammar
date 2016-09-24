@@ -9,8 +9,8 @@ public class Token {
     private final TokenType type;
     private final String value;
 
-    private transient boolean unaryFlag = false;
-    private transient boolean functionFlag = false;
+    private final transient boolean unaryFlag;
+    private final transient boolean functionFlag;
 
     /***************************************************************************
      *                                                                         *
@@ -20,12 +20,18 @@ public class Token {
 
     /**
      * Creates a new Token
-     * @param type
-     * @param value
+     * @param type The type
+     * @param value The token word
      */
     public Token(TokenType type, String value){
+        this(type, value, false, false);
+    }
+
+    public Token(TokenType type, String value, boolean unary, boolean function){
         this.type = type;
         this.value= value;
+        this.unaryFlag = unary;
+        this.functionFlag = function;
     }
 
     /***************************************************************************
@@ -48,26 +54,22 @@ public class Token {
 
     @Override
     public String toString(){
-        return "[" + getValue() +" "+ getType() + "]";
+        return "[" + getValue() +" "+ getType() +  " u:" + hasUnaryMark() + "]";
     }
 
     /**
      * Returns a copy of this token with the new given type.
      */
-    public Token withOperator(TokenType type) {
-        return new Token(type, this.value);
+    public Token asUnary() {
+        return new Token(this.type, this.value, true, false);
     }
 
-
-    public void markUnary(){
-        unaryFlag = true;
+    public Token asFunction() {
+        return new Token(this.type, this.value, false, true);
     }
+
     public boolean hasUnaryMark(){
         return unaryFlag;
-    }
-
-    public void markFunction() {
-        functionFlag = true;
     }
 
     public boolean hasFunctionFlag(){
