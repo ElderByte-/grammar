@@ -65,7 +65,7 @@ bintray {
         name = "${jar.baseName}"
         userOrg = 'elderbyte'
         licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/ElderByte-/Warden'
+        vcsUrl = 'https://github.com/ElderByte-/grammar'
 
         version {
             name = project.version //Bintray logical version name
