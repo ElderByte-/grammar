@@ -3,7 +3,9 @@ package com.elderbyte.grammar.core.eval;
 import com.elderbyte.grammar.core.IExpressionParser;
 import com.elderbyte.grammar.core.dom.expressions.*;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @SuppressWarnings("Duplicates")
@@ -49,7 +51,7 @@ public abstract class GenericExpressionEvaluator<T> {
      * @param context The variable context
      * @return The evaluated value
      */
-    public T eval(String expression, Map<String, T> context){
+    public T eval(String expression, EvalContext<T> context){
         ExpressionNode node = expressionParser.parseExpression(expression);
         return eval(node, context);
     }
@@ -72,12 +74,12 @@ public abstract class GenericExpressionEvaluator<T> {
      * @param context The current variable context
      * @return The evaluated value
      */
-    protected T evalNode(ExpressionNode node, Map<String, T> context){
+    protected T evalNode(ExpressionNode node, EvalContext<T> context){
         return null;
     }
 
 
-    private T eval(ExpressionNode node, Map<String, T> context) {
+    private T eval(ExpressionNode node, EvalContext<T> context) {
 
         T val = evalNode(node, context);
 
@@ -99,18 +101,24 @@ public abstract class GenericExpressionEvaluator<T> {
             T value = eval(((UnaryOperatorExpression) node).getInner(), context);
             return evalUnaryOperation(((UnaryOperatorExpression) node).getOperator(), value);
 
-        }else if(node instanceof VariableReference){
+        }else if(node instanceof VariableReference) {
 
             String variable = ((VariableReference) node).getName();
 
-            if(context == null) throw new IllegalStateException("There are variables such as '"+variable+"' in this expression but you did not provide a variable context!");
+            if (context == null)
+                throw new IllegalStateException("There are variables such as '" + variable + "' in this expression but you did not provide a variable context!");
 
-            T varValue = context.get(variable);
-            if(varValue != null){
-                return varValue;
-            }else{
-                throw new IllegalStateException("Unknown variable: " + variable);
-            }
+            return context.resolveVariable(variable)
+                    .orElseThrow(() -> new IllegalStateException("Unknown variable: " + variable));
+
+
+        }else if(node instanceof  FunctionInvokationExpression){
+
+            String func = ((FunctionInvokationExpression) node).getFunctionName();
+            List<T> argumentValues = ((FunctionInvokationExpression) node).getArguments().stream()
+                    .map(n -> eval(n, context)).collect(Collectors.toList());
+            T value = context.invoke(func, argumentValues);
+            return value;
         }else{
             throw new IllegalStateException("Unsupported node encountered: " + node);
         }
