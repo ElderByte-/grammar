@@ -1,5 +1,8 @@
 package com.elderbyte.grammar.core.dom.expressions;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Represents an Operator in an expression
  */
@@ -9,6 +12,7 @@ public final class Operator {
     private final String sign;
     private final int precedence;
     private final boolean isLeftAssociative;
+    private final List<String> signSynonyms;
 
     /**
      * Creates a new Operator
@@ -16,12 +20,14 @@ public final class Operator {
      * @param precedence
      * @param isLeftAssociative
      * @param arity Is this Operator strictly binary, unary etc?
+     * @param synonymSigns Alternative (synonym) signs for this operators
      */
-    public Operator(String sign, int precedence, boolean isLeftAssociative, Arity arity){
+    public Operator(String sign, int precedence, boolean isLeftAssociative, Arity arity, String... synonymSigns){
         this.arity = arity;
         this.sign = sign;
         this.precedence = precedence;
         this.isLeftAssociative = isLeftAssociative;
+        this.signSynonyms = Arrays.asList(synonymSigns);
     }
 
     public Arity getArity() {
@@ -40,6 +46,9 @@ public final class Operator {
         return isLeftAssociative;
     }
 
+    public Iterable<String> getSignSynonyms() {
+        return signSynonyms;
+    }
 
     @Override
     public String toString() {
@@ -50,4 +59,6 @@ public final class Operator {
             ", isLeftAssociative=" + isLeftAssociative +
             '}';
     }
+
+
 }

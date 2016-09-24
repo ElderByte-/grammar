@@ -23,6 +23,9 @@ public class OperatorSet {
     public OperatorSet(Iterable<Operator> operators){
         for (Operator o : operators){
             this.operators.put(o.getSign(), o);
+            for (String synonym : o.getSignSynonyms()){
+                this.operators.put(synonym, o);
+            }
         }
     }
 
@@ -34,22 +37,22 @@ public class OperatorSet {
     public Operator findOperator(Token token){
         Operator op = operators.get(token.getValue());
 
-
         if(op != null && token.hasUnaryMark() && op.getArity() != Arity.Unary){
-            op = proxyUnary(op, token);
+            op = proxyUnary(op);
         }
 
         return op;
     }
 
-    private Operator proxyUnary(Operator original, Token token){
-        Operator unary = unaryOperators.get(token.getValue());
+    private Operator proxyUnary(Operator original){
+        Operator unary = unaryOperators.get(original.getSign());
         if(unary == null){
             unary = new Operator(
                     original.getSign(),
                     99,
                     original.isLeftAssociative(),
                     Arity.Unary);
+            unaryOperators.put(unary.getSign(), unary);
         }
         return unary;
     }
