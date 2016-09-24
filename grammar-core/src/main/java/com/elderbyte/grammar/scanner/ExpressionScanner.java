@@ -56,7 +56,7 @@ public class ExpressionScanner {
                 x -> isWordRegex.matcher(x).matches(),
 
                 // Default literal values (strings not supported by default)
-                x -> x.equals("true") || x.equals("false") || NumberPattern.matcher(x).matches() || FloatingPointNumberPattern.matcher(x).matches());
+                x -> NumberPattern.matcher(x).matches() || FloatingPointNumberPattern.matcher(x).matches());
     }
 
 

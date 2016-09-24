@@ -16,6 +16,8 @@ public class BooleanExpressionParser extends ExpressionParser  {
                     new Operator("^", 3, true, Arity.Binary), // xor
                     new Operator("!", 99, true, Arity.Unary)  // not
                 ),
+                new Token(TokenType.Literal, "true"),
+                new Token(TokenType.Literal, "false"),
                 new Token(TokenType.Whitespace, " "),
                 new Token(TokenType.Whitespace, "\t"),
                 new Token(TokenType.Parentheses_Open, "("),
