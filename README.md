@@ -34,6 +34,8 @@ Just include a `Map<String, Double> context` in your eval argument, and variable
 ### Custom Parser
 
 This is an example of the default math expression parser configuration - you can create one for your own needs:
+
+**Math Parser**
 ```java
 
 public class MathExpressionParser extends ExpressionParser {
@@ -55,4 +57,26 @@ public class MathExpressionParser extends ExpressionParser {
     }
 }
 
+```
+
+**Boolean Parser**
+```java
+public class BooleanExpressionParser extends ExpressionParser  {
+
+    public BooleanExpressionParser(){
+        super(new OperatorSet(
+                    new Operator("&", 3, true, Arity.Binary, "and"),
+                    new Operator("|", 3, true, Arity.Binary, "or"),
+                    new Operator("^", 3, true, Arity.Binary, "xor"),
+                    new Operator("!", 99, true, Arity.Unary, "not", "~")
+                ),
+                new Token(TokenType.Literal, "true"),
+                new Token(TokenType.Literal, "false"),
+                new Token(TokenType.Whitespace, " "),
+                new Token(TokenType.Whitespace, "\t"),
+                new Token(TokenType.Parentheses_Open, "("),
+                new Token(TokenType.Parentheses_Closed, ")")
+        );
+    }
+}
 ```
