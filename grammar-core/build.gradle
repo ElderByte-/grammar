@@ -64,7 +64,7 @@ bintray {
         repo = 'maven'
         name = "${jar.baseName}"
         userOrg = 'elderbyte'
-        licenses = ['Apache-2.0']
+        licenses = ['MIT']
         vcsUrl = 'https://github.com/ElderByte-/grammar'
 
         version {
