@@ -1,8 +1,8 @@
 package com.elderbyte.grammar.math;
 
-import com.elderbyte.grammar.IExpressionParser;
-import com.elderbyte.grammar.dom.expressions.*;
-import com.elderbyte.grammar.eval.GenericExpressionEvaluator;
+import com.elderbyte.grammar.core.IExpressionParser;
+import com.elderbyte.grammar.core.dom.expressions.*;
+import com.elderbyte.grammar.core.eval.GenericExpressionEvaluator;
 
 /**
  * Evaluates math expressions

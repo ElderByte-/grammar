@@ -1,14 +1,11 @@
 package com.elderbyte.grammar.math;
 
-import com.elderbyte.grammar.ExpressionParser;
-import com.elderbyte.grammar.dom.expressions.Arity;
-import com.elderbyte.grammar.dom.expressions.Operator;
-import com.elderbyte.grammar.scanner.OperatorSet;
-import com.elderbyte.grammar.scanner.Token;
-import com.elderbyte.grammar.scanner.TokenType;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.elderbyte.grammar.core.ExpressionParser;
+import com.elderbyte.grammar.core.dom.expressions.Arity;
+import com.elderbyte.grammar.core.dom.expressions.Operator;
+import com.elderbyte.grammar.core.scanner.OperatorSet;
+import com.elderbyte.grammar.core.scanner.Token;
+import com.elderbyte.grammar.core.scanner.TokenType;
 
 /**
  * A basic math expression parser

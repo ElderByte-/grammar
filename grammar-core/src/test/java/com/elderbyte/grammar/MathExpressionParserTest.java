@@ -1,6 +1,7 @@
 package com.elderbyte.grammar;
 
-import com.elderbyte.grammar.dom.expressions.*;
+import com.elderbyte.grammar.core.CodeDomException;
+import com.elderbyte.grammar.core.dom.expressions.*;
 import com.elderbyte.grammar.math.MathExpressionParser;
 import org.junit.Assert;
 import org.junit.Before;

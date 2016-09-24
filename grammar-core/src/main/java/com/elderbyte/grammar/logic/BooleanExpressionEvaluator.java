@@ -1,8 +1,8 @@
 package com.elderbyte.grammar.logic;
 
-import com.elderbyte.grammar.IExpressionParser;
-import com.elderbyte.grammar.dom.expressions.Operator;
-import com.elderbyte.grammar.eval.GenericExpressionEvaluator;
+import com.elderbyte.grammar.core.IExpressionParser;
+import com.elderbyte.grammar.core.dom.expressions.Operator;
+import com.elderbyte.grammar.core.eval.GenericExpressionEvaluator;
 
 /**
  * Evaluates boolean expressions

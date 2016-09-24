@@ -1,8 +1,8 @@
 package com.elderbyte.grammar;
 
-import com.elderbyte.grammar.dom.expressions.Arity;
-import com.elderbyte.grammar.dom.expressions.Operator;
-import com.elderbyte.grammar.scanner.*;
+import com.elderbyte.grammar.core.dom.expressions.Arity;
+import com.elderbyte.grammar.core.dom.expressions.Operator;
+import com.elderbyte.grammar.core.scanner.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

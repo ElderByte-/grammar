@@ -1,7 +1,8 @@
 package com.elderbyte.grammar.generators;
 
 
-import com.elderbyte.grammar.dom.expressions.*;
+import com.elderbyte.grammar.core.ICodeGenerator;
+import com.elderbyte.grammar.core.dom.expressions.*;
 
 
 /**

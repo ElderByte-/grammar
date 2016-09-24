@@ -1,8 +1,8 @@
 package com.elderbyte.grammar;
 
-import com.elderbyte.grammar.dom.expressions.BinaryOperatorExpression;
-import com.elderbyte.grammar.dom.expressions.ExpressionNode;
-import com.elderbyte.grammar.dom.expressions.LiteralValueExpression;
+import com.elderbyte.grammar.core.dom.expressions.BinaryOperatorExpression;
+import com.elderbyte.grammar.core.dom.expressions.ExpressionNode;
+import com.elderbyte.grammar.core.dom.expressions.LiteralValueExpression;
 import com.elderbyte.grammar.logic.BooleanExpressionParser;
 import org.junit.Assert;
 import org.junit.Before;
