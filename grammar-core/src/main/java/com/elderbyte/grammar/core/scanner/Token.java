@@ -9,7 +9,8 @@ public class Token {
     private final TokenType type;
     private final String value;
 
-    private transient boolean unaryFlag;
+    private transient boolean unaryFlag = false;
+    private transient boolean functionFlag = false;
 
     /***************************************************************************
      *                                                                         *
@@ -63,5 +64,13 @@ public class Token {
     }
     public boolean hasUnaryMark(){
         return unaryFlag;
+    }
+
+    public void markFunction() {
+        functionFlag = true;
+    }
+
+    public boolean hasFunctionFlag(){
+        return functionFlag;
     }
 }

@@ -55,10 +55,10 @@ public class MathExpressionParserTest {
         Assert.assertEquals(bex.getOperator().getSign(), "+");
 
         Assert.assertEquals(LiteralValueExpression.class, bex.getLeft().getClass());
-        Assert.assertEquals("6", ((LiteralValueExpression)bex.getLeft()).getValue());
+        Assert.assertEquals("5", ((LiteralValueExpression)bex.getLeft()).getValue());
 
         Assert.assertEquals(LiteralValueExpression.class, bex.getRight().getClass());
-        Assert.assertEquals("5", ((LiteralValueExpression)bex.getRight()).getValue());
+        Assert.assertEquals("6", ((LiteralValueExpression)bex.getRight()).getValue());
     }
 
     @Test
@@ -73,10 +73,10 @@ public class MathExpressionParserTest {
         Assert.assertEquals(bex.getOperator().getSign(), "-");
 
         Assert.assertEquals(LiteralValueExpression.class, bex.getLeft().getClass());
-        Assert.assertEquals("6", ((LiteralValueExpression)bex.getLeft()).getValue());
+        Assert.assertEquals("5", ((LiteralValueExpression)bex.getLeft()).getValue());
 
         Assert.assertEquals(LiteralValueExpression.class, bex.getRight().getClass());
-        Assert.assertEquals("5", ((LiteralValueExpression)bex.getRight()).getValue());
+        Assert.assertEquals("6", ((LiteralValueExpression)bex.getRight()).getValue());
     }
 
     @Test
@@ -93,6 +93,38 @@ public class MathExpressionParserTest {
     @Test(expected = CodeDomException.class)
     public void testIllegalExpression(){
         mathExpressionParser.parseExpression("-");
+    }
+
+
+    @Test
+    public void testFunctionNoArg(){
+        ExpressionNode node = mathExpressionParser.parseExpression("pi()");
+        Assert.assertEquals(FunctionInvokationExpression.class, node.getClass());
+        Assert.assertEquals("pi", ((FunctionInvokationExpression)node).getFunctionName());
+        Assert.assertEquals(0, ((FunctionInvokationExpression)node).getArguments().size());
+    }
+
+
+    @Test
+    public void testFunctionOneArg(){
+        ExpressionNode node = mathExpressionParser.parseExpression("sin(5)");
+        Assert.assertEquals(FunctionInvokationExpression.class, node.getClass());
+        Assert.assertEquals("sin", ((FunctionInvokationExpression)node).getFunctionName());
+        Assert.assertEquals(1, ((FunctionInvokationExpression)node).getArguments().size());
+        Assert.assertEquals(LiteralValueExpression.class, ((FunctionInvokationExpression)node).getArguments().get(0).getClass());
+        Assert.assertEquals("5", ((LiteralValueExpression)((FunctionInvokationExpression)node).getArguments().get(0)).getValue());
+    }
+
+    @Test
+    public void testFunctionMultiArg(){
+        ExpressionNode node = mathExpressionParser.parseExpression("test(5, 4, 3)");
+        Assert.assertEquals(FunctionInvokationExpression.class, node.getClass());
+        Assert.assertEquals("test", ((FunctionInvokationExpression)node).getFunctionName());
+        Assert.assertEquals(3, ((FunctionInvokationExpression)node).getArguments().size());
+        Assert.assertEquals(LiteralValueExpression.class, ((FunctionInvokationExpression)node).getArguments().get(0).getClass());
+        Assert.assertEquals("5", ((LiteralValueExpression)((FunctionInvokationExpression)node).getArguments().get(0)).getValue());
+        Assert.assertEquals("4", ((LiteralValueExpression)((FunctionInvokationExpression)node).getArguments().get(1)).getValue());
+        Assert.assertEquals("3", ((LiteralValueExpression)((FunctionInvokationExpression)node).getArguments().get(2)).getValue());
     }
 
 }

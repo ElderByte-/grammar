@@ -39,8 +39,8 @@ public class BooleanExpressionParserTest {
         Assert.assertEquals(BinaryOperatorExpression.class, node.getClass());
         Assert.assertEquals("&", ((BinaryOperatorExpression)node).getOperator().getSign());
 
-        Assert.assertEquals("false", ((LiteralValueExpression)((BinaryOperatorExpression)node).getLeft()).getValue());
-        Assert.assertEquals("true", ((LiteralValueExpression)((BinaryOperatorExpression)node).getRight()).getValue());
+        Assert.assertEquals("true", ((LiteralValueExpression)((BinaryOperatorExpression)node).getLeft()).getValue());
+        Assert.assertEquals("false", ((LiteralValueExpression)((BinaryOperatorExpression)node).getRight()).getValue());
     }
 
 

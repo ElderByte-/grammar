@@ -24,7 +24,9 @@ public class MathExpressionParser extends ExpressionParser {
                 new Token(TokenType.Whitespace, " "),
                 new Token(TokenType.Whitespace, "\t"),
                 new Token(TokenType.Parentheses_Open, "("),
-                new Token(TokenType.Parentheses_Closed, ")")
+                new Token(TokenType.Parentheses_Closed, ")"),
+                new Token(TokenType.Whitespace, ",")
+
         );
     }
 }

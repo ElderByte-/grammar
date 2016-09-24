@@ -89,8 +89,8 @@ public abstract class GenericExpressionEvaluator<T> {
 
         } else if (node instanceof BinaryOperatorExpression) {
 
-            T right = eval(((BinaryOperatorExpression) node).getLeft(), context);
-            T left = eval(((BinaryOperatorExpression) node).getRight(), context);
+            T right = eval(((BinaryOperatorExpression) node).getRight(), context);
+            T left = eval(((BinaryOperatorExpression) node).getLeft(), context);
             Operator op = ((BinaryOperatorExpression) node).getOperator();
 
             return evalBinaryOperation(left, op, right);

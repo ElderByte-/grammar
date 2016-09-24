@@ -32,13 +32,18 @@ public class ASTGenerator {
 
         rpn.forEach(token -> {
 
-
-            if(isOperator(token)){
+            if(isOperatorOrFunction(token)){
                 // token is Operator / Function
                 // Get count of required params for this op / func
-                int required = requiredParameters(token);
-
                 int available = expressionNodeStack.size();
+                int required;
+                if(token.getType() == TokenType.Operator) {
+                    required = requiredParameters(token);
+                }else{
+                    // In case of a function
+                    required = available;
+                }
+
 
                 if(available < required){
                     throw new InsufficientParametersException("Not enough parameters for operator "+token+". Have " +  available + " but need " + required);
@@ -48,6 +53,8 @@ public class ASTGenerator {
                 for(int i = 0; i < required; i++){
                     params.add(expressionNodeStack.pop());
                 }
+
+                Collections.reverse(params); // They are reversed due RPN
 
                 ExpressionNode expressionNode = buildExpression(token, params);
                 expressionNodeStack.push(expressionNode);
@@ -68,18 +75,27 @@ public class ASTGenerator {
         }
     }
 
+    private ExpressionNode buildExpression(Token token, List<ExpressionNode> params){
 
 
-    private ExpressionNode buildExpression(Token operator, List<ExpressionNode> params){
-        if(operator.getType() == TokenType.Operator){
-            Operator op = operatorSet.findOperator(operator);
-            if(op.getArity() == Arity.Binary){
-                return new BinaryOperatorExpression(params.get(0), op, params.get(1));
-            }else if(op.getArity() == Arity.Unary){
-                return new UnaryOperatorExpression(op, params.get(0));
-            }
+        switch (token.getType()){
+            case Operator:
+                Operator op = operatorSet.findOperator(token);
+                if(op.getArity() == Arity.Binary){
+                    return new BinaryOperatorExpression(params.get(0), op, params.get(1));
+                }else if(op.getArity() == Arity.Unary){
+                    return new UnaryOperatorExpression(op, params.get(0));
+                }
+                break;
+
+            case Identifier:
+                if(token.hasFunctionFlag()){
+                    return new FunctionInvokationExpression(token.getValue(), params);
+                }
+                break;
+
         }
-        throw new ASTGeneratorException("Failed to build Expression. Unexpected Operator Token " + operator + " [" + operator.getType() + "]!");
+        throw new ASTGeneratorException("Failed to build Expression. Unexpected Token: " + token);
     }
 
     private boolean isIdentfier(Token token){
@@ -91,12 +107,12 @@ public class ASTGenerator {
         return token.getType() == TokenType.Literal;
     }
 
-    private boolean isOperator(Token token){
+    private boolean isOperatorOrFunction(Token token){
         return token.getType() == TokenType.Operator || isFunction(token);
     }
 
     private boolean isFunction(Token token){
-        return false;   // TODO
+        return token.hasFunctionFlag();
     }
 
     private int requiredParameters(Token token) {
