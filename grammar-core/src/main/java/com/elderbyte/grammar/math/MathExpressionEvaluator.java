@@ -57,8 +57,8 @@ public class MathExpressionEvaluator extends GenericExpressionEvaluator<Double> 
             case "%":
                 return left % right;
 
-            case "^":
-                return (Double)(double)(((int)(double)left) ^ ((int)(double)right)); // Hello Java o.0
+            case "^": // We interpret ^ as pow as commonly done in math, not xor as in java.
+                return Math.pow(left, right);
 
 
             default:

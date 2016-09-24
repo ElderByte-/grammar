@@ -64,6 +64,12 @@ public class MathExpressionEvaluatorTest {
     }
 
     @Test
+    public void testPow(){
+        double result = math.eval("2 ^ 5");
+        Assert.assertEquals(Math.pow(2, 5), result, 0);
+    }
+
+    @Test
     public void testVariableContext(){
 
         Map<String, Double> ctx = new HashMap<>();
