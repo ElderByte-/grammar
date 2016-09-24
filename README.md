@@ -19,7 +19,7 @@ res = eval("not(true or false) or (false and true)")
 
 ### Math expression examples
 ```java
-res = eval("10 + 5 / 20 * (40 % 2)")
+res = eval("10 + 5.6 / 20 * (40 % 2)")
 ```
 
 ## Variable support
