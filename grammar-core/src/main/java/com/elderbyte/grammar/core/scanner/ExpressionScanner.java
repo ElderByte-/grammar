@@ -1,6 +1,7 @@
 package com.elderbyte.grammar.core.scanner;
 
 import com.elderbyte.common.ArgumentNullException;
+import com.elderbyte.grammar.core.CodeDomException;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -135,10 +136,12 @@ public class ExpressionScanner {
                 t = new Token(TokenType.Literal, currentWord);
             }else if(isIdentifier(currentWord)){
                 t = new Token(TokenType.Identifier, currentWord);
+            }else{
+                throw new CodeDomException("Unexpected token: " + currentWord);
             }
         }
 
-        if(t != null && t.getType() != TokenType.Whitespace){
+        if(t.getType() != TokenType.Whitespace){
             return t;
         }else
             return null;
