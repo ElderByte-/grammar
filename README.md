@@ -1,6 +1,6 @@
 # grammar
 
-_grammar_ is a shunting-yard based expression parser to generate an Abstract Syntaxt Tree (AST).
+_grammar_ is a shunting-yard based expression parser to generate an Abstract Syntaxt Tree (AST). At its heart it is a library to allow you to quickly create your own expression language. But off course, since it is so easy, grammar also ships with some default expression parsers and evaluators for basic math and boolean support. 
 
 The tokenizer, parser and also evaluators are highly customizable. For example, you can configure the operators, the terminal symbols and customize about almost everything else.
 
@@ -80,3 +80,7 @@ public class BooleanExpressionParser extends ExpressionParser  {
     }
 }
 ```
+
+## How to get started
+
+You should have a look at our [Unit tests here](https://github.com/ElderByte-/grammar/tree/master/grammar-core/src/test/java/com/elderbyte/grammar) to get a feeling how to use this library.
