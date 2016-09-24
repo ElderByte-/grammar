@@ -29,8 +29,18 @@ public class BooleanExpressionEvaluatorTest {
     public void testSimpleNot(){
         Assert.assertEquals(true, booleanExpressionEvaluator.eval("!false"));
         Assert.assertEquals(false, booleanExpressionEvaluator.eval("!true"));
-
     }
+
+    @Test
+    public void testSimpleNot2(){
+        Assert.assertEquals(true, booleanExpressionEvaluator.eval("~false"));
+    }
+
+    @Test
+    public void testSimpleNot3(){
+        Assert.assertEquals(true, booleanExpressionEvaluator.eval("not false"));
+    }
+
 
     @Test
     public void testAnd(){
@@ -66,5 +76,10 @@ public class BooleanExpressionEvaluatorTest {
         Assert.assertEquals(false, booleanExpressionEvaluator.eval("!(true | false) | (false & true)"));
     }
 
+
+    @Test
+    public void testComplexWithSynonyms(){
+        Assert.assertEquals(false, booleanExpressionEvaluator.eval("not(true or false) or (false and true)"));
+    }
 
 }
