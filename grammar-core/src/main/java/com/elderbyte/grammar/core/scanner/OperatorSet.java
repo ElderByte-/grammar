@@ -3,6 +3,7 @@ package com.elderbyte.grammar.core.scanner;
 import com.elderbyte.grammar.core.dom.expressions.Arity;
 import com.elderbyte.grammar.core.dom.expressions.Operator;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,17 +16,12 @@ public class OperatorSet {
     private final  Map<String, Operator> unaryOperators = new HashMap<>();
 
     public OperatorSet(Operator... operators){
-        for (Operator o : operators){
-            this.operators.put(o.getSign(), o);
-        }
+        this(Arrays.asList(operators));
     }
 
     public OperatorSet(Iterable<Operator> operators){
         for (Operator o : operators){
-            this.operators.put(o.getSign(), o);
-            for (String synonym : o.getSignSynonyms()){
-                this.operators.put(synonym, o);
-            }
+            addOperator(o);
         }
     }
 
@@ -55,6 +51,13 @@ public class OperatorSet {
             unaryOperators.put(unary.getSign(), unary);
         }
         return unary;
+    }
+
+    private void addOperator(Operator o){
+        this.operators.put(o.getSign(), o);
+        for (String synonym : o.getSignSynonyms()){
+            this.operators.put(synonym, o);
+        }
     }
 
 
