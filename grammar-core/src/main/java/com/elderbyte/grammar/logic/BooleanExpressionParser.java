@@ -1,4 +1,4 @@
-package com.elderbyte.grammar.math;
+package com.elderbyte.grammar.logic;
 
 import com.elderbyte.grammar.ExpressionParser;
 import com.elderbyte.grammar.dom.expressions.Arity;
@@ -7,22 +7,14 @@ import com.elderbyte.grammar.scanner.OperatorSet;
 import com.elderbyte.grammar.scanner.Token;
 import com.elderbyte.grammar.scanner.TokenType;
 
-import java.util.ArrayList;
-import java.util.List;
+public class BooleanExpressionParser extends ExpressionParser  {
 
-/**
- * A basic math expression parser
- */
-public class MathExpressionParser extends ExpressionParser {
-
-    public MathExpressionParser(){
+    public BooleanExpressionParser(){
         super(new OperatorSet(
-                new Operator("+", 2, true, Arity.Binary),
-                new Operator("-", 2, true, Arity.Binary),
-                new Operator("*", 3, true, Arity.Binary),
-                new Operator("/", 3, true, Arity.Binary),
-                new Operator("^", 4, false, Arity.Binary),
-                new Operator("%", 4, false, Arity.Binary)
+                    new Operator("&", 3, true, Arity.Binary), // and
+                    new Operator("|", 3, true, Arity.Binary), // or
+                    new Operator("^", 3, true, Arity.Binary), // xor
+                    new Operator("!", 99, true, Arity.Unary)  // not
                 ),
                 new Token(TokenType.Whitespace, " "),
                 new Token(TokenType.Whitespace, "\t"),

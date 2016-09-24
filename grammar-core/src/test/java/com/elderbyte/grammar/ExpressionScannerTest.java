@@ -2,22 +2,15 @@ package com.elderbyte.grammar;
 
 import com.elderbyte.grammar.dom.expressions.Arity;
 import com.elderbyte.grammar.dom.expressions.Operator;
-import com.elderbyte.grammar.scanner.ExpressionScanner;
-import com.elderbyte.grammar.scanner.OperatorSet;
-import com.elderbyte.grammar.scanner.Token;
-import com.elderbyte.grammar.scanner.TokenType;
+import com.elderbyte.grammar.scanner.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
-/**
- * Created by isnull on 23.09.16.
- */
 public class ExpressionScannerTest {
 
 
@@ -26,10 +19,14 @@ public class ExpressionScannerTest {
     @Before
     public void init(){
 
-        scanner = new ExpressionScanner(new OperatorSet(
-                new Operator("++", 10, true, Arity.Unary),
-                new Operator("+", 2, true, Arity.Binary)
-        ));
+        scanner = new ExpressionScanner(new TerminalTokenManager(
+                new OperatorSet(
+                    new Operator("++", 10, true, Arity.Unary),
+                    new Operator("+", 2, true, Arity.Binary)
+                ),
+                new Token(TokenType.Whitespace, " ")
+            )
+        );
     }
 
     @Test

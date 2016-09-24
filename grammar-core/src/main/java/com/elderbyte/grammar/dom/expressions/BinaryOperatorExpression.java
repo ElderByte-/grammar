@@ -1,7 +1,7 @@
 package com.elderbyte.grammar.dom.expressions;
 
 /**
- * Represents a boolean and expression:
+ * Represents a binary expression with a defined operator:
  *
  * [left] (operator) [right]
  *
@@ -16,9 +16,6 @@ public class BinaryOperatorExpression extends BinaryExpression {
 
     /**
      * Creates a new BinaryOperatorExpression
-     * @param left
-     * @param operator
-     * @param right
      */
     public BinaryOperatorExpression(ExpressionNode left, Operator operator, ExpressionNode right) {
         super(left, right);

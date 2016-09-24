@@ -1,7 +1,12 @@
 package com.elderbyte.grammar.dom.expressions;
 
 /**
- * Negates the given boolean expression
+ * Represents an expression with only one argument:
+ *
+ * !true
+ *
+ * -5
+ *
  */
 public class UnaryOperatorExpression extends UnaryExpression {
 

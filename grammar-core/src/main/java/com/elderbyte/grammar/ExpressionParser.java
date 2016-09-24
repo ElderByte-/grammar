@@ -1,10 +1,12 @@
 package com.elderbyte.grammar;
 
 import com.elderbyte.grammar.dom.expressions.ExpressionNode;
+import com.elderbyte.grammar.dom.expressions.Operator;
 import com.elderbyte.grammar.parser.*;
 import com.elderbyte.common.ArgumentNullException;
 import com.elderbyte.grammar.scanner.ExpressionScanner;
 import com.elderbyte.grammar.scanner.OperatorSet;
+import com.elderbyte.grammar.scanner.TerminalTokenManager;
 import com.elderbyte.grammar.scanner.Token;
 
 import java.util.function.Function;
@@ -43,23 +45,21 @@ public class ExpressionParser implements IExpressionParser {
 
     /**
      * Creates a new ExpressionParser with the given operators
-     * @param operatorSet
      */
-    public ExpressionParser(OperatorSet operatorSet){
+    public ExpressionParser(OperatorSet operatorSet, Token... terminals){
 
         this(
-            new ExpressionScanner(operatorSet),
+            new ExpressionScanner(new TerminalTokenManager(operatorSet, terminals)),
             new RPNTransformer(operatorSet),
             new ASTGenerator(operatorSet));
     }
 
     /**
      * Creates a new ExpressionParser with the given operators
-     * @param operatorSet
      */
-    public ExpressionParser(OperatorSet operatorSet, Pattern wordMatcher){
+    public ExpressionParser(OperatorSet operatorSet, Pattern wordMatcher,  Token... terminals){
         this(
-            new ExpressionScanner(operatorSet, wordMatcher),
+            new ExpressionScanner(new TerminalTokenManager(operatorSet, terminals), wordMatcher),
             new RPNTransformer(operatorSet),
             new ASTGenerator(operatorSet));
     }

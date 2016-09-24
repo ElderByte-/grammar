@@ -38,19 +38,19 @@ public class ExpressionScanner {
     /**
      * Creates a new expression scanner using the given operator-set.
      * Uses the default word-pattern matcher, which matches alpha-characters as words.
-     * @param operatorSet
+     * @param terminalManager
      */
-    public ExpressionScanner(OperatorSet operatorSet){
-        this(operatorSet, DefaultIdentifierPattern);
+    public ExpressionScanner(TerminalTokenManager terminalManager){
+        this(terminalManager, DefaultIdentifierPattern);
     }
 
     /**
      * Creates a new expression scanner using the given operator-set and word regex.
-     * @param operatorSet
+     * @param terminalManager
      */
-    public ExpressionScanner(OperatorSet operatorSet, Pattern isWordRegex){
+    public ExpressionScanner(TerminalTokenManager terminalManager, Pattern isWordRegex){
         this(
-            new TerminalTokenManager(operatorSet),
+                terminalManager,
 
                 // Default identifier
                 x -> isWordRegex.matcher(x).matches(),
@@ -131,10 +131,10 @@ public class ExpressionScanner {
         Token t = terminalManager.findTerminal(currentWord);
 
         if(t == null){
-            if(isIdentifier(currentWord)){
-                t = new Token(TokenType.Identifier, currentWord);
-            }else if(isLiteral(currentWord)){
+            if(isLiteral(currentWord)){
                 t = new Token(TokenType.Literal, currentWord);
+            }else if(isIdentifier(currentWord)){
+                t = new Token(TokenType.Identifier, currentWord);
             }
         }
 
