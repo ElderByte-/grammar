@@ -106,7 +106,7 @@ public class MathExpressionEvaluatorTest {
         math.eval("90 - alpha", context);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = EvalException.class)
     public void testFunctionEvalFail(){
         EvalContext<Double> context = new EvalContext<>();
         context.setVariable("huhu", 33d);

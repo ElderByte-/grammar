@@ -45,7 +45,7 @@ public class EvalContext<T> {
     }
 
     public T invoke(String func, List<T> argumentValues) {
-        throw new IllegalStateException("Could not find and invoke function " + func + "(" +
+        throw new EvalException("Could not find and invoke function " + func + "(" +
                 String.join(",", argumentValues.stream().map(Object::toString).collect(Collectors.toList())) +")" );
     }
 
