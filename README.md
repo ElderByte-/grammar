@@ -27,9 +27,11 @@ res = eval("10 + 5.6 / 20 * (40 % 2)")
 ## Variable support
 If your expression contains variables, _grammar_ supports them aswell:
 ```java
-res = eval("90 - alpha", context)
+EvalContext<Double> context = new EvalContext<>();
+context.setVariable("alpha", 15d);
+res = eval("90 - alpha", context);
 ```
-Just include a `Map<String, Double> context` in your eval argument, and variable-reference nodes are substituted for you.
+Just include a `EvalContext<Double> context` in your eval argument, and variable-reference nodes are substituted for you.
 
 
 
@@ -49,16 +51,20 @@ public class MathExpressionParser extends ExpressionParser {
                 new Operator("*", 3, true, Arity.Binary),
                 new Operator("/", 3, true, Arity.Binary),
                 new Operator("^", 4, false, Arity.Binary),
-                new Operator("%", 4, false, Arity.Binary)
-                ),
+                new Operator("%", 4, false, Arity.Binary),
+
+                new Operator("+", 99, true, Arity.Unary),
+                new Operator("-", 99, true, Arity.Unary)
+                        ),
                 new Token(TokenType.Whitespace, " "),
                 new Token(TokenType.Whitespace, "\t"),
                 new Token(TokenType.Parentheses_Open, "("),
-                new Token(TokenType.Parentheses_Closed, ")")
+                new Token(TokenType.Parentheses_Closed, ")"),
+                new Token(TokenType.Whitespace, ",")
+
         );
     }
 }
-
 ```
 
 **Boolean Parser**
