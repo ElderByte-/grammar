@@ -14,6 +14,7 @@ public class BooleanExpressionParser extends ExpressionParser  {
                     new Operator("&", 3, true, Arity.Binary, "and"),
                     new Operator("|", 3, true, Arity.Binary, "or"),
                     new Operator("^", 3, true, Arity.Binary, "xor"),
+
                     new Operator("!", 99, true, Arity.Unary, "not", "~")
                 ),
                 new Token(TokenType.Literal, "true"),

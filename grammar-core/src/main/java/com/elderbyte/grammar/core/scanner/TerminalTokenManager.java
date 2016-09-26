@@ -29,11 +29,8 @@ public class TerminalTokenManager {
 
         List<Token> allTerminals = new ArrayList<>();
 
-        for(Operator o : operatorSet.getAllOperators()){
-            allTerminals.add(new Token(TokenType.Operator, o.getSign()));
-            for (String synonym : o.getSignSynonyms()) {
-                allTerminals.add(new Token(TokenType.Operator, synonym));
-            }
+        for(String sign : operatorSet.getAllOperatorSigns()){
+            allTerminals.add(new Token(TokenType.Operator, sign));
         }
 
         allTerminals.addAll(Arrays.asList(terminals));

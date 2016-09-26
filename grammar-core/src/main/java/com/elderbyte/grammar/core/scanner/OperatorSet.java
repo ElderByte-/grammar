@@ -5,6 +5,7 @@ import com.elderbyte.grammar.core.dom.expressions.Operator;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,8 +13,10 @@ import java.util.Map;
  */
 public class OperatorSet {
 
-    private final Map<String, Operator> operators = new HashMap<>();
-    private final  Map<String, Operator> unaryOperators = new HashMap<>();
+    private final Map<String, Map<Arity, Operator>> operators = new HashMap<>();
+
+
+    // TODO support registering the same operator as binary / unary multiple times
 
     public OperatorSet(Operator... operators){
         this(Arrays.asList(operators));
@@ -25,40 +28,43 @@ public class OperatorSet {
         }
     }
 
-    Iterable<Operator> getAllOperators(){
-        return operators.values();
+    public Iterable<String> getAllOperatorSigns(){
+        return operators.keySet();
     }
 
 
     public Operator findOperator(Token token){
-        Operator op = operators.get(token.getValue());
+        Map<Arity, Operator> ops = operators.get(token.getValue());
 
-        if(op != null && token.hasUnaryMark() && op.getArity() != Arity.Unary){
-            op = proxyUnary(op);
+        if(ops != null){
+            Operator op = ops.get(token.getArity());
+
+            if(op == null)
+                throw new IllegalStateException("Operator '" + token.getValue() + "' doesn't support " + token.getArity());
+
+            return op;
         }
-
-        return op;
-    }
-
-    private Operator proxyUnary(Operator original){
-        Operator unary = unaryOperators.get(original.getSign());
-        if(unary == null){
-            unary = new Operator(
-                    original.getSign(),
-                    99,
-                    original.isLeftAssociative(),
-                    Arity.Unary);
-            unaryOperators.put(unary.getSign(), unary);
-        }
-        return unary;
+        throw new IllegalStateException("Unknown Operator '" + token.getValue() + "'");
     }
 
     private void addOperator(Operator o){
-        this.operators.put(o.getSign(), o);
+        addOperator(o.getSign(), o);
         for (String synonym : o.getSignSynonyms()){
-            this.operators.put(synonym, o);
+            addOperator(synonym, o);
         }
     }
 
+
+    private void addOperator(String sign, Operator o){
+
+        Map<Arity, Operator> op = operators.get(sign);
+
+        if(op == null){
+            op = new HashMap<>();
+            operators.put(sign, op);
+        }
+
+       op.put(o.getArity(), o);
+    }
 
 }

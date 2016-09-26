@@ -1,5 +1,6 @@
 package com.elderbyte.grammar;
 
+import com.elderbyte.grammar.core.CodeDomException;
 import com.elderbyte.grammar.core.dom.expressions.BinaryOperatorExpression;
 import com.elderbyte.grammar.core.dom.expressions.ExpressionNode;
 import com.elderbyte.grammar.core.dom.expressions.LiteralValueExpression;
@@ -41,6 +42,11 @@ public class BooleanExpressionParserTest {
 
         Assert.assertEquals("true", ((LiteralValueExpression)((BinaryOperatorExpression)node).getLeft()).getValue());
         Assert.assertEquals("false", ((LiteralValueExpression)((BinaryOperatorExpression)node).getRight()).getValue());
+    }
+
+    @Test(expected = CodeDomException.class)
+    public void testIllegalUnary(){
+        ExpressionNode node = booleanExpressionParser.parseExpression("true & | false");
     }
 
 

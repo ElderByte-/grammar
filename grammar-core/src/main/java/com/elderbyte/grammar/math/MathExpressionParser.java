@@ -19,8 +19,11 @@ public class MathExpressionParser extends ExpressionParser {
                 new Operator("*", 3, true, Arity.Binary),
                 new Operator("/", 3, true, Arity.Binary),
                 new Operator("^", 4, false, Arity.Binary),
-                new Operator("%", 4, false, Arity.Binary)
-                ),
+                new Operator("%", 4, false, Arity.Binary),
+
+                new Operator("+", 99, true, Arity.Unary),
+                new Operator("-", 99, true, Arity.Unary)
+                        ),
                 new Token(TokenType.Whitespace, " "),
                 new Token(TokenType.Whitespace, "\t"),
                 new Token(TokenType.Parentheses_Open, "("),

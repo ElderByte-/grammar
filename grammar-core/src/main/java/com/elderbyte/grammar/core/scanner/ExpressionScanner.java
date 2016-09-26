@@ -137,7 +137,7 @@ public class ExpressionScanner {
             }else if(isIdentifier(currentWord)){
                 t = new Token(TokenType.Identifier, currentWord);
             }else{
-                throw new CodeDomException("Unexpected token: " + currentWord);
+                throw new CodeDomException("Unexpected token: '" + currentWord + "' <---");
             }
         }
 

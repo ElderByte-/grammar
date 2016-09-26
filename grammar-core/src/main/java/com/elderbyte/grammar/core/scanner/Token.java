@@ -1,5 +1,7 @@
 package com.elderbyte.grammar.core.scanner;
 
+import com.elderbyte.grammar.core.dom.expressions.Arity;
+
 /**
  * Represents a token emitted by the scanner.
  * This class is immutable
@@ -74,5 +76,10 @@ public class Token {
 
     public boolean hasFunctionFlag(){
         return functionFlag;
+    }
+
+
+    public Arity getArity(){
+        return unaryFlag ? Arity.Unary : Arity.Binary;
     }
 }
