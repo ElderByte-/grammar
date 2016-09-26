@@ -12,6 +12,6 @@ public interface IExpressionParser {
      * @param expression The expression string to parse
      * @return  Returns the top node of the AST
      */
-    ExpressionNode parseExpression(String expression) throws CodeDomException;
+    ExpressionNode parseExpression(String expression) throws GrammarException;
 
 }

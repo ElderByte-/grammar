@@ -1,6 +1,6 @@
 package com.elderbyte.grammar.core.parser;
 
-import com.elderbyte.grammar.core.CodeDomException;
+import com.elderbyte.grammar.core.GrammarException;
 import com.elderbyte.grammar.core.dom.expressions.Operator;
 import com.elderbyte.common.ArgumentNullException;
 import com.elderbyte.grammar.core.scanner.OperatorSet;
@@ -55,7 +55,7 @@ public class RPNTransformer {
      * @param tokenStream
      * @return A token stream in RPN order
      *
-     * @exception CodeDomException Thrown when the transformation failed.
+     * @exception GrammarException Thrown when the transformation failed.
      */
     public Stream<Token> toReversePolishNotation(Stream<Token> tokenStream){
 
@@ -109,7 +109,7 @@ public class RPNTransformer {
                 if(!success)
                     throw new ParenthesisMismatchException("No closing Parenthesis found for open Parenthesis!");
             }else{
-                throw new CodeDomException(String.format("Unexpected Token '%s' in RPN Expression!", token));
+                throw new GrammarException(String.format("Unexpected Token '%s' in RPN Expression!", token));
             }
         }
 
@@ -150,7 +150,7 @@ public class RPNTransformer {
         }else if(token.hasFunctionFlag()){
             return 0; //?
         }else{
-            throw new CodeDomException("Unexpected token " + token);
+            throw new GrammarException("Unexpected token " + token);
         }
     }
 
@@ -162,7 +162,7 @@ public class RPNTransformer {
         }else if(token.hasFunctionFlag()){
             return true; // ??
         }else{
-            throw new CodeDomException("Unexpected token " + token);
+            throw new GrammarException("Unexpected token " + token);
         }
     }
 

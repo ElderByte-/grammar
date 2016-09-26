@@ -1,5 +1,6 @@
 package com.elderbyte.grammar.core.scanner;
 
+import com.elderbyte.grammar.core.GrammarException;
 import com.elderbyte.grammar.core.dom.expressions.Arity;
 import com.elderbyte.grammar.core.dom.expressions.Operator;
 
@@ -14,9 +15,6 @@ import java.util.Map;
 public class OperatorSet {
 
     private final Map<String, Map<Arity, Operator>> operators = new HashMap<>();
-
-
-    // TODO support registering the same operator as binary / unary multiple times
 
     public OperatorSet(Operator... operators){
         this(Arrays.asList(operators));
@@ -40,11 +38,11 @@ public class OperatorSet {
             Operator op = ops.get(token.getArity());
 
             if(op == null)
-                throw new IllegalStateException("Operator '" + token.getValue() + "' doesn't support " + token.getArity());
+                throw new GrammarException("Operator '" + token.getValue() + "' doesn't support " + token.getArity());
 
             return op;
         }
-        throw new IllegalStateException("Unknown Operator '" + token.getValue() + "'");
+        throw new GrammarException("Unknown Operator '" + token.getValue() + "'");
     }
 
     private void addOperator(Operator o){

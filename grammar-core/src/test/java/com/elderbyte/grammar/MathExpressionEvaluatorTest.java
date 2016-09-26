@@ -2,6 +2,7 @@ package com.elderbyte.grammar;
 
 
 import com.elderbyte.grammar.core.eval.EvalContext;
+import com.elderbyte.grammar.core.eval.EvalException;
 import com.elderbyte.grammar.math.MathExpressionEvaluator;
 import com.elderbyte.grammar.math.MathExpressionParser;
 import org.junit.Assert;
@@ -93,12 +94,12 @@ public class MathExpressionEvaluatorTest {
         Assert.assertEquals(75, result, 0);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = EvalException.class)
     public void testVariableContextMissing(){
         math.eval("90 - alpha");
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = EvalException.class)
     public void testVariableMissing(){
         EvalContext<Double> context = new EvalContext<>();
         context.setVariable("huhu", 33d);

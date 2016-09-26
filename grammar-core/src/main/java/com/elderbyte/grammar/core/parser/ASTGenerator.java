@@ -130,12 +130,12 @@ public class ASTGenerator {
             }else if(op.getArity() == Arity.Ternary){
                 paramCount = 3;
             }else{
-                throw new IllegalStateException("Operator arity " + op.getArity() + " not yet supported!");
+                throw new ASTGeneratorException("Operator arity " + op.getArity() + " not yet supported!");
             }
             return paramCount;
         }else{
             // Function? Not implemented yet. Would require look-ahead to count params...
-            throw new IllegalStateException("Only operators are currently supported");
+            throw new ASTGeneratorException("Only operators are currently supported");
         }
     }
 

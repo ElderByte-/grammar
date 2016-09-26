@@ -1,5 +1,6 @@
 package com.elderbyte.grammar.core.eval;
 
+import com.elderbyte.grammar.core.GrammarException;
 import com.elderbyte.grammar.core.IExpressionParser;
 import com.elderbyte.grammar.core.dom.expressions.*;
 
@@ -39,8 +40,9 @@ public abstract class GenericExpressionEvaluator<T> {
      * Evaluates the given expression to its literal value.
      * @param expression The expression
      * @return The evaluated value
+     * @throws EvalException Thrown when evaluation failed.
      */
-    public T eval(String expression){
+    public T eval(String expression) throws EvalException {
         return eval(expression, null);
     }
 
@@ -50,10 +52,16 @@ public abstract class GenericExpressionEvaluator<T> {
      * @param expression The expression
      * @param context The variable context
      * @return The evaluated value
+     * @throws EvalException Thrown when evaluation failed.
      */
-    public T eval(String expression, EvalContext<T> context){
-        ExpressionNode node = expressionParser.parseExpression(expression);
-        return eval(node, context);
+    public T eval(String expression, EvalContext<T> context) throws EvalException {
+
+        try{
+            ExpressionNode node = expressionParser.parseExpression(expression);
+            return eval(node, context);
+        }catch(GrammarException e){
+            throw new EvalException("Evaluation of '" + expression +"' failed because it could not be parsed.", e);
+        }
     }
 
     /**************************************************************************
@@ -106,10 +114,10 @@ public abstract class GenericExpressionEvaluator<T> {
             String variable = ((VariableReference) node).getName();
 
             if (context == null)
-                throw new IllegalStateException("There are variables such as '" + variable + "' in this expression but you did not provide a variable context!");
+                throw new EvalException("There are variables such as '" + variable + "' in this expression but you did not provide a variable context!");
 
             return context.resolveVariable(variable)
-                    .orElseThrow(() -> new IllegalStateException("Unknown variable: " + variable));
+                    .orElseThrow(() -> new EvalException("Unknown variable: " + variable));
 
 
         }else if(node instanceof  FunctionInvokationExpression){
@@ -120,7 +128,7 @@ public abstract class GenericExpressionEvaluator<T> {
             T value = context.invoke(func, argumentValues);
             return value;
         }else{
-            throw new IllegalStateException("Unsupported node encountered: " + node);
+            throw new EvalException("Unsupported node encountered: " + node);
         }
     }
 

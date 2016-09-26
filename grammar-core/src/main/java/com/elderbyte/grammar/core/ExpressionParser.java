@@ -112,7 +112,7 @@ public class ExpressionParser implements IExpressionParser {
      *
      * @param code The code to parse. Must not be Null!
      * @return Returns the root node of the Expression AST
-     * @exception CodeDomException Thrown if parsing of the code failed
+     * @exception GrammarException Thrown if parsing of the code failed
      */
     @Override
     public ExpressionNode parseExpression(String code) {
@@ -128,8 +128,8 @@ public class ExpressionParser implements IExpressionParser {
 
             Stream<Token> rpn = rpnTransformer.toReversePolishNotation(tokens);
             return astGenerator.parse(rpn);
-        }catch (CodeDomException e){
-            throw new CodeDomException(String.format("Failed to parse '%s'", code), e);
+        }catch (GrammarException e){
+            throw new GrammarException(String.format("Failed to parse '%s'", code), e);
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.elderbyte.grammar.core.scanner;
 
 import com.elderbyte.common.ArgumentNullException;
-import com.elderbyte.grammar.core.CodeDomException;
+import com.elderbyte.grammar.core.GrammarException;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -39,7 +39,7 @@ public class ExpressionScanner {
     /**
      * Creates a new expression scanner using the given operator-set.
      * Uses the default word-pattern matcher, which matches alpha-characters as words.
-     * @param terminalManager
+     * @param terminalManager The terminal manager
      */
     public ExpressionScanner(TerminalTokenManager terminalManager){
         this(terminalManager, DefaultIdentifierPattern);
@@ -47,7 +47,7 @@ public class ExpressionScanner {
 
     /**
      * Creates a new expression scanner using the given operator-set and word regex.
-     * @param terminalManager
+     * @param terminalManager The terminal manager
      */
     public ExpressionScanner(TerminalTokenManager terminalManager, Pattern isWordRegex){
         this(
@@ -137,7 +137,7 @@ public class ExpressionScanner {
             }else if(isIdentifier(currentWord)){
                 t = new Token(TokenType.Identifier, currentWord);
             }else{
-                throw new CodeDomException("Unexpected token: '" + currentWord + "' <---");
+                throw new GrammarException("Unexpected token: '" + currentWord + "' <---");
             }
         }
 

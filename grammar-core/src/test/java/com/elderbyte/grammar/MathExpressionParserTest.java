@@ -1,6 +1,6 @@
 package com.elderbyte.grammar;
 
-import com.elderbyte.grammar.core.CodeDomException;
+import com.elderbyte.grammar.core.GrammarException;
 import com.elderbyte.grammar.core.dom.expressions.*;
 import com.elderbyte.grammar.math.MathExpressionParser;
 import org.junit.Assert;
@@ -90,7 +90,7 @@ public class MathExpressionParserTest {
     }
 
 
-    @Test(expected = CodeDomException.class)
+    @Test(expected = GrammarException.class)
     public void testIllegalExpression(){
         mathExpressionParser.parseExpression("-");
     }
