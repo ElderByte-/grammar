@@ -1,5 +1,7 @@
 package com.elderbyte.grammar.core.dom.expressions;
 
+import com.elderbyte.common.ArgumentNullException;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +25,10 @@ public final class Operator {
      * @param synonymSigns Alternative (synonym) signs for this operators
      */
     public Operator(String sign, int precedence, boolean isLeftAssociative, Arity arity, String... synonymSigns){
+
+        if(sign == null) throw new ArgumentNullException("sign");
+        if(arity == null) throw new ArgumentNullException("arity");
+
         this.arity = arity;
         this.sign = sign;
         this.precedence = precedence;
@@ -60,5 +66,25 @@ public final class Operator {
             '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Operator operator = (Operator) o;
+
+        if (getPrecedence() != operator.getPrecedence()) return false;
+        if (isLeftAssociative() != operator.isLeftAssociative()) return false;
+        if (getArity() != operator.getArity()) return false;
+        return getSign().equals(operator.getSign());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getArity().hashCode();
+        result = 31 * result + getSign().hashCode();
+        result = 31 * result + getPrecedence();
+        result = 31 * result + (isLeftAssociative() ? 1 : 0);
+        return result;
+    }
 }

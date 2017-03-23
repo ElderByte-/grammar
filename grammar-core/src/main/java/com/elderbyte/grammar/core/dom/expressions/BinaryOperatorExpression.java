@@ -32,4 +32,19 @@ public class BinaryOperatorExpression extends BinaryExpression {
     public String toString() {
         return "BinOP{" + getLeft() + " " + operator.getSign() + " " + getRight() + '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BinaryOperatorExpression that = (BinaryOperatorExpression) o;
+        return getOperator().equals(that.getOperator()) && (super.equals(o));
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + getOperator().hashCode();
+        return result;
+    }
 }

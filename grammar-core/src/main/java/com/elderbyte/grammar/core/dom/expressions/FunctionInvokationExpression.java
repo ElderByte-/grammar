@@ -34,5 +34,4 @@ public class FunctionInvokationExpression extends ExpressionNode {
         return functionName + "(" + String.join(",", arguments.stream().map(a -> a.toString()).collect(Collectors.toList())) + ")";
     }
 
-
 }
