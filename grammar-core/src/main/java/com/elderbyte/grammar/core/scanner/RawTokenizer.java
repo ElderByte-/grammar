@@ -31,6 +31,12 @@ class RawTokenizer {
             return this;
         }
 
+        public Builder withStringToggle(Collection<String> toggle){
+            stringToggles.addAll(toggle);
+            return this;
+        }
+
+
         public RawTokenizer build(){
             return new  RawTokenizer(dels, stringToggles);
         }
