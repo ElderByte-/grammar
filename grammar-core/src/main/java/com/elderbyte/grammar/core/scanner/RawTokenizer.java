@@ -6,7 +6,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+/**
+ * Represents a raw tokenizer.
+ * This tokenizer splits a string in sub parts without interpreting or omitting any input.
+ */
 class RawTokenizer {
 
     static class Builder{
@@ -80,13 +83,14 @@ class RawTokenizer {
                 // String literal has been toggled
 
                 if(!inStringContext){
-                    noDelStartPos = i+toggle.length();
+                    noDelStartPos = i;
                     inStringContext = true;
                 }else{
                     inStringContext = false;
-                    String literal = input.substring(noDelStartPos, i);
+                    String literal = input.substring(noDelStartPos, i+toggle.length());
                     rawTokens.add(literal);
                     noDelStartPos = -1;
+                    i += toggle.length() - 1;
                 }
 
             }else{

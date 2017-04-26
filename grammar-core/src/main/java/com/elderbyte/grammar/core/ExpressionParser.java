@@ -47,8 +47,12 @@ public class ExpressionParser implements IExpressionParser {
      */
     public ExpressionParser(OperatorSet operatorSet, Token... terminals){
 
+
+
+
         this(
-            new ExpressionScanner(new TerminalTokenManager(operatorSet, terminals)),
+                ExpressionScanner.start()
+                        .build(new TerminalTokenManager(operatorSet, terminals)),
             new RPNTransformer(operatorSet),
             new ASTGenerator(operatorSet));
     }
@@ -58,7 +62,9 @@ public class ExpressionParser implements IExpressionParser {
      */
     public ExpressionParser(OperatorSet operatorSet, Pattern wordMatcher,  Token... terminals){
         this(
-            new ExpressionScanner(new TerminalTokenManager(operatorSet, terminals), wordMatcher),
+                ExpressionScanner.start()
+                        .withIdentifierPattern(wordMatcher)
+                        .build(new TerminalTokenManager(operatorSet, terminals)),
             new RPNTransformer(operatorSet),
             new ASTGenerator(operatorSet));
     }

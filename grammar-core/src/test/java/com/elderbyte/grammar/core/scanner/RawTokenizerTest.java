@@ -67,7 +67,7 @@ public class RawTokenizerTest {
         List<String> rawtokens = tokenizer.tokenize("test 'hello world' 12");
         Assert.assertEquals("test", rawtokens.get(0));
         Assert.assertEquals(" ", rawtokens.get(1));
-        Assert.assertEquals("hello world", rawtokens.get(2));
+        Assert.assertEquals("'hello world'", rawtokens.get(2));
         Assert.assertEquals(" ", rawtokens.get(3));
         Assert.assertEquals("12", rawtokens.get(4));
     }
@@ -80,11 +80,11 @@ public class RawTokenizerTest {
                 .withStringToggle("'")
                 .build();
 
-        List<String> rawtokens = tokenizer.tokenize("test 'hello world''mörön' 12");
+        List<String> rawtokens = tokenizer.tokenize("test 'hello world''move 12' 12");
         Assert.assertEquals("test", rawtokens.get(0));
         Assert.assertEquals(" ", rawtokens.get(1));
-        Assert.assertEquals("hello world", rawtokens.get(2));
-        Assert.assertEquals("mörön", rawtokens.get(3));
+        Assert.assertEquals("'hello world'", rawtokens.get(2));
+        Assert.assertEquals("'move 12'", rawtokens.get(3));
         Assert.assertEquals(" ", rawtokens.get(4));
         Assert.assertEquals("12", rawtokens.get(5));
     }
@@ -100,7 +100,7 @@ public class RawTokenizerTest {
         List<String> rawtokens = tokenizer.tokenize("test \"hello world\" 12");
         Assert.assertEquals("test", rawtokens.get(0));
         Assert.assertEquals(" ", rawtokens.get(1));
-        Assert.assertEquals("hello world", rawtokens.get(2));
+        Assert.assertEquals("\"hello world\"", rawtokens.get(2));
         Assert.assertEquals(" ", rawtokens.get(3));
         Assert.assertEquals("12", rawtokens.get(4));
     }
