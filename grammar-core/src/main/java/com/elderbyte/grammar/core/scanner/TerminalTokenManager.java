@@ -1,7 +1,5 @@
 package com.elderbyte.grammar.core.scanner;
 
-import com.elderbyte.grammar.core.dom.expressions.Operator;
-
 import java.util.*;
 
 /**

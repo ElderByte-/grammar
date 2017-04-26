@@ -94,15 +94,15 @@ public class ExpressionScanner {
 
         if(expression == null) throw new ArgumentNullException("expression");
 
-
         List<Token> tokens = new ArrayList<>();
 
-
-        RawTokenizer tokenizer = new RawTokenizer(expression, terminalManager.getTerminalKeywords());
+        RawTokenizer tokenizer = RawTokenizer.start()
+                                    .withDelemiting(terminalManager.getTerminalKeywords())
+                                    .build();
 
         Token previous = null;
 
-        for(String rawToken : tokenizer.tokenize()){
+        for(String rawToken : tokenizer.tokenize(expression)){
             Token t = emit(rawToken);
             if(t != null){
 
