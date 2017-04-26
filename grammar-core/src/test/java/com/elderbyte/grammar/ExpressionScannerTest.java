@@ -19,7 +19,7 @@ public class ExpressionScannerTest {
     @Before
     public void init(){
 
-        scanner = new ExpressionScanner(new TerminalTokenManager(
+        scanner = ExpressionScanner.start().build(new TerminalTokenManager(
                 new OperatorSet(
                     new Operator("++", 10, true, Arity.Unary),
                     new Operator("+", 2, true, Arity.Binary)

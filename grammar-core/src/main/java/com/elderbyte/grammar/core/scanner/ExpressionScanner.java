@@ -14,6 +14,55 @@ import java.util.stream.Stream;
  */
 public class ExpressionScanner {
 
+
+    public static class Builder {
+
+        private static final Pattern DefaultIdentifierPattern = Pattern.compile("^[a-zA-Z]+\\w+$");
+        private static final Pattern NumberPattern = Pattern.compile("^[0-9]+$");
+        private static final Pattern FloatingPointNumberPattern = Pattern.compile("^[0-9]+\\.[0-9]+$");
+
+
+        private Predicate<String> isIdentifierPredicate = x -> DefaultIdentifierPattern.matcher(x).matches();
+        private Predicate<String> isLiteralValuePredicate = x -> NumberPattern.matcher(x).matches() || FloatingPointNumberPattern.matcher(x).matches();
+        private Set<String> stringToggles = new HashSet<>();
+
+        private Builder(){}
+
+
+        public Builder withIdentifierPattern(Pattern isWordRegex){
+            isIdentifierPredicate = x -> isWordRegex.matcher(x).matches();
+            return this;
+        }
+
+        public Builder withLiteralStringToggle(String toggle){
+            stringToggles.add(toggle);
+            return this;
+        }
+
+        public Builder withLiteral(Predicate<String> isLiteral){
+            this.isLiteralValuePredicate = isLiteral;
+            return this;
+        }
+
+
+        public ExpressionScanner build(TerminalTokenManager terminalManager){
+            return new ExpressionScanner(
+                    terminalManager,
+                    isIdentifierPredicate,
+                    isLiteralValuePredicate,
+                    stringToggles);
+        }
+
+    }
+
+    /**
+     * Creates a new expression-scanner builder
+     */
+    public static Builder start(){
+        return new Builder();
+    }
+
+
     /***************************************************************************
      *                                                                         *
      * Private Fields                                                          *
@@ -23,12 +72,9 @@ public class ExpressionScanner {
     private final TerminalTokenManager terminalManager;
     private final Predicate<String> isIdentifierPredicate;
     private final Predicate<String> isLiteralValuePredicate;
+    private final RawTokenizer tokenizer;
 
-    private static final Pattern DefaultIdentifierPattern = Pattern.compile("^[a-zA-Z]+\\w+$");
-
-    private static final Pattern NumberPattern = Pattern.compile("^[0-9]+$");
-    private static final Pattern FloatingPointNumberPattern = Pattern.compile("^[0-9]+\\.[0-9]+$");
-
+    private final Collection<String> stringTogglers = new ArrayList<>();
 
     /***************************************************************************
      *                                                                         *
@@ -36,30 +82,14 @@ public class ExpressionScanner {
      *                                                                         *
      **************************************************************************/
 
-    /**
-     * Creates a new expression scanner using the given operator-set.
-     * Uses the default word-pattern matcher, which matches alpha-characters as words.
-     * @param terminalManager The terminal manager
-     */
-    public ExpressionScanner(TerminalTokenManager terminalManager){
-        this(terminalManager, DefaultIdentifierPattern);
+
+
+    public ExpressionScanner(
+            TerminalTokenManager terminalManager,
+            Predicate<String> isIdentifierPredicate,
+            Predicate<String> isLiteralValuePredicate){
+        this(terminalManager, isIdentifierPredicate, isLiteralValuePredicate, new ArrayList<>());
     }
-
-    /**
-     * Creates a new expression scanner using the given operator-set and word regex.
-     * @param terminalManager The terminal manager
-     */
-    public ExpressionScanner(TerminalTokenManager terminalManager, Pattern isWordRegex){
-        this(
-                terminalManager,
-
-                // Default identifier
-                x -> isWordRegex.matcher(x).matches(),
-
-                // Default literal values (strings not supported by default)
-                x -> NumberPattern.matcher(x).matches() || FloatingPointNumberPattern.matcher(x).matches());
-    }
-
 
     /**
      * Creates a new ExpressionTokenizer with the given Operators
@@ -67,7 +97,8 @@ public class ExpressionScanner {
     public ExpressionScanner(
             TerminalTokenManager terminalManager,
             Predicate<String> isIdentifierPredicate,
-            Predicate<String> isLiteralValuePredicate){
+            Predicate<String> isLiteralValuePredicate,
+            Collection<String> stringToggles){
 
         if(terminalManager == null) throw new ArgumentNullException("terminalManager");
         if(isIdentifierPredicate == null) throw new ArgumentNullException("isWordPredicate");
@@ -75,6 +106,13 @@ public class ExpressionScanner {
         this.terminalManager = terminalManager;
         this.isIdentifierPredicate = isIdentifierPredicate;
         this.isLiteralValuePredicate = isLiteralValuePredicate;
+
+        this.tokenizer = RawTokenizer.start()
+                .withDelemiting(terminalManager.getTerminalKeywords())
+                .withStringToggle(stringToggles)
+                .build();
+
+        this.stringTogglers.addAll(stringToggles);
     }
 
 
@@ -86,23 +124,19 @@ public class ExpressionScanner {
 
     /**
      * Turns the given string into a token stream.
-     * @param expression
-     * @return
+     * @param expression The expression to parse
+     * @return A token stream
      * @throws ArgumentNullException If expression is null.
      */
     public Stream<Token> tokenize(String expression){
 
         if(expression == null) throw new ArgumentNullException("expression");
 
-
         List<Token> tokens = new ArrayList<>();
-
-
-        RawTokenizer tokenizer = new RawTokenizer(expression, terminalManager.getTerminalKeywords());
 
         Token previous = null;
 
-        for(String rawToken : tokenizer.tokenize()){
+        for(String rawToken : tokenizer.tokenize(expression)){
             Token t = emit(rawToken);
             if(t != null){
 
@@ -115,7 +149,6 @@ public class ExpressionScanner {
                 tokens.add(t);
                 previous = t;
             }
-
         }
 
         return tokens.stream();
@@ -127,13 +160,15 @@ public class ExpressionScanner {
      *                                                                         *
      **************************************************************************/
 
-
     private Token emit(String currentWord){
         Token t = terminalManager.findTerminal(currentWord);
 
         if(t == null){
-            if(isLiteral(currentWord)){
+            if(isLiteral(currentWord)) {
                 t = new Token(TokenType.Literal, currentWord);
+            }else if(literalString(currentWord).isPresent()){
+                String w = literalString(currentWord).get();
+                t = new Token(TokenType.Literal, w);
             }else if(isIdentifier(currentWord)){
                 t = new Token(TokenType.Identifier, currentWord);
             }else{
@@ -147,14 +182,20 @@ public class ExpressionScanner {
             return null;
     }
 
-    private boolean isIdentifier(String word){
-        return isIdentifierPredicate.test(word);
+    private boolean isIdentifier(String token){
+        return isIdentifierPredicate.test(token);
     }
 
-    private boolean isLiteral(String word){
-        return isLiteralValuePredicate.test(word);
+    private boolean isLiteral(String token){
+        return isLiteralValuePredicate.test(token);
     }
 
-
-
+    private Optional<String> literalString(String token){
+        for(String toggler : stringTogglers){
+            if(token.startsWith(toggler) && token.endsWith(toggler)){
+                return Optional.of(token.substring(toggler.length(), token.length()-toggler.length()));
+            }
+        }
+        return Optional.empty();
+    }
 }
